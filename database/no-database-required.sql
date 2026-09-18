@@ -1,0 +1,6 @@
+-- Tahanan Coffee House POS — version 1
+--
+-- This first version intentionally has no database schema or seed data.
+-- Customer and user records are temporary PHP arrays in their controllers,
+-- as required by the project brief. This file documents that fact so the
+-- repository still includes a database-export placeholder for submission.

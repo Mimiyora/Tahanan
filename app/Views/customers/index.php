@@ -20,7 +20,7 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg>
                 <input type="search" data-table-search="customer-table" placeholder="Search customer records…">
             </label>
-            <span class="data-note"><i></i> Temporary static data</span>
+            <span class="data-note"><i></i> Live database records</span>
         </div>
 
         <div class="table-card reveal reveal--late">
@@ -28,10 +28,17 @@
                 <thead><tr><th>Customer</th><th>Email address</th><th>Phone number</th><th><span class="sr-only">Status</span></th></tr></thead>
                 <tbody>
                 <?php foreach ($customers as $customer): ?>
+                    <?php $phone = $customer['phone'] ?: 'Not provided'; ?>
                     <tr>
-                        <td data-label="Customer"><div class="identity"><span class="avatar"><?= esc($customer['initials']) ?></span><strong><?= esc($customer['name']) ?></strong></div></td>
+                        <td data-label="Customer"><div class="identity"><span class="avatar"><?= esc($customer['initials']) ?></span><strong><?= esc($customer['full_name']) ?></strong></div></td>
                         <td data-label="Email"><a href="mailto:<?= esc($customer['email']) ?>"><?= esc($customer['email']) ?></a></td>
-                        <td data-label="Phone"><a href="tel:<?= esc(str_replace(' ', '', $customer['phone'])) ?>"><?= esc($customer['phone']) ?></a></td>
+                        <td data-label="Phone">
+                            <?php if ($customer['phone']): ?>
+                                <a href="tel:<?= esc(str_replace(' ', '', $customer['phone'])) ?>"><?= esc($phone) ?></a>
+                            <?php else: ?>
+                                <?= esc($phone) ?>
+                            <?php endif ?>
+                        </td>
                         <td class="row-arrow" aria-hidden="true">→</td>
                     </tr>
                 <?php endforeach ?>

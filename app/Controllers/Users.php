@@ -2,24 +2,34 @@
 
 namespace App\Controllers;
 
+use App\Models\UserModel;
+
 class Users extends BaseController
 {
     public function index(): string
     {
-        // Temporary in-memory data source. This will be replaced by a model later.
-        $users = [
-            ['username' => 'ana.cruz', 'name' => 'Ana Cruz', 'role' => 'Manager', 'initials' => 'AC'],
-            ['username' => 'paolo.lim', 'name' => 'Paolo Lim', 'role' => 'Head Barista', 'initials' => 'PL'],
-            ['username' => 'mika.tan', 'name' => 'Mika Tan', 'role' => 'Cashier', 'initials' => 'MT'],
-            ['username' => 'nico.garcia', 'name' => 'Nico Garcia', 'role' => 'Barista', 'initials' => 'NG'],
-            ['username' => 'bea.ramos', 'name' => 'Bea Ramos', 'role' => 'Cashier', 'initials' => 'BR'],
-            ['username' => 'luis.dizon', 'name' => 'Luis Dizon', 'role' => 'Inventory', 'initials' => 'LD'],
-        ];
+        $userModel = new UserModel();
+        $users = $userModel->orderBy('full_name', 'ASC')->findAll();
+
+        foreach ($users as &$user) {
+            $user['initials'] = $this->initials($user['full_name']);
+        }
+        unset($user);
 
         return view('users/index', [
             'title'       => 'User Accounts',
             'currentPage' => 'users',
             'users'       => $users,
         ]);
+    }
+
+    private function initials(string $fullName): string
+    {
+        $words = preg_split('/\s+/', trim($fullName)) ?: [];
+
+        return strtoupper(implode('', array_map(
+            static fn (string $word): string => substr($word, 0, 1),
+            array_slice($words, 0, 2),
+        )));
     }
 }

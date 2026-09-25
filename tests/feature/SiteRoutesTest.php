@@ -1,6 +1,7 @@
 <?php
 
 use CodeIgniter\Test\CIUnitTestCase;
+use CodeIgniter\Test\DatabaseTestTrait;
 use CodeIgniter\Test\FeatureTestTrait;
 
 /**
@@ -8,7 +9,12 @@ use CodeIgniter\Test\FeatureTestTrait;
  */
 final class SiteRoutesTest extends CIUnitTestCase
 {
+    use DatabaseTestTrait;
     use FeatureTestTrait;
+
+    protected $namespace = 'App';
+    protected $basePath = APPPATH . 'Database';
+    protected $seed = 'DatabaseSeeder';
 
     public function testLandingPageLoads(): void
     {
@@ -26,21 +32,27 @@ final class SiteRoutesTest extends CIUnitTestCase
         $result->assertSee('A coffeehouse with');
     }
 
-    public function testCustomersPageListsStaticRecords(): void
+    public function testCustomersPageListsDatabaseRecords(): void
     {
         $result = $this->get('/customers');
 
         $result->assertOK();
         $result->assertSee('Isabella Santos');
         $result->assertSee('Gabriel Navarro');
+        $result->assertSee('Live database records');
+        $result->assertDontSee('Temporary static data');
     }
 
-    public function testUsersPageListsStaticRecords(): void
+    public function testUsersPageListsDatabaseRecords(): void
     {
         $result = $this->get('/users');
 
         $result->assertOK();
         $result->assertSee('Ana Cruz');
         $result->assertSee('Luis Dizon');
+        $result->assertSee('@ana.cruz');
+        $result->assertSee('Sep 1, 2026');
+        $result->assertSee('Live database records');
+        $result->assertDontSee('Temporary static data');
     }
 }

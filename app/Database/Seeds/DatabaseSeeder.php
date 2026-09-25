@@ -8,7 +8,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call('CustomerSeeder');
-        $this->call('UserSeeder');
+        if ($this->db->table('customers')->countAllResults() === 0) {
+            $this->call('CustomerSeeder');
+        }
+
+        if ($this->db->table('users')->countAllResults() === 0) {
+            $this->call('UserSeeder');
+        }
     }
 }

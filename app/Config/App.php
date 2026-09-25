@@ -6,6 +6,20 @@ use CodeIgniter\Config\BaseConfig;
 
 class App extends BaseConfig
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $baseUrlWasConfigured = false !== getenv('app_baseURL') || false !== getenv('app.baseURL');
+        $renderHost = getenv('RENDER_EXTERNAL_HOSTNAME');
+        $railwayHost = getenv('RAILWAY_PUBLIC_DOMAIN');
+        $publicHost = false !== $renderHost ? $renderHost : $railwayHost;
+
+        if (! $baseUrlWasConfigured && false !== $publicHost) {
+            $this->baseURL = 'https://' . trim($publicHost, '/') . '/';
+        }
+    }
+
     /**
      * --------------------------------------------------------------------------
      * Base Site URL
@@ -40,7 +54,7 @@ class App extends BaseConfig
      * something else. If you have configured your web server to remove this file
      * from your site URIs, set this variable to an empty string.
      */
-    public string $indexPage = 'index.php';
+    public string $indexPage = '';
 
     /**
      * --------------------------------------------------------------------------

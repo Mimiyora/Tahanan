@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: tahanan-pos
+    runtime: docker
+    plan: free
+    region: singapore
+    repo: https://github.com/Mimiyora/Tahanan
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    autoDeployTrigger: commit
+    envVars:
+      - key: CI_ENVIRONMENT
+        value: production
+      - key: MYSQLHOST
+        sync: false
+      - key: MYSQLPORT
+        value: "3306"
+      - key: MYSQLDATABASE
+        sync: false
+      - key: MYSQLUSER
+        sync: false
+      - key: MYSQLPASSWORD
+        sync: false

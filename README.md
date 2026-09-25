@@ -87,3 +87,24 @@ The repository includes a production `Dockerfile`, Apache configuration, an idem
 6. Redeploy the web service and open `/customers` and `/users` to confirm the seeded records appear.
 
 Railway database services are private by default, so the application should use the referenced private MySQL connection values instead of exposing the database publicly.
+
+## Render deployment
+
+The included `render.yaml` creates the CodeIgniter application as a free Docker web service in Render's Singapore region. The app automatically uses Render's assigned hostname and port.
+
+The assignment requires MySQL. Render does not provide managed MySQL on its free datastore plans, so choose one of these database options before creating the web service:
+
+- Deploy Render's MySQL template as a paid private service with a persistent disk.
+- Supply connection details for an existing externally hosted MySQL database.
+
+For a Render-hosted MySQL service:
+
+1. Deploy the official Render MySQL template in the Singapore region.
+2. Set `MYSQL_DATABASE` to `tahanan_pos`, choose a database username, and generate secure user and root passwords.
+3. Keep the required disk mounted at `/var/lib/mysql`.
+4. In Render, create a new Blueprint from this repository's `render.yaml`.
+5. When prompted, provide the MySQL private hostname, database name, username, and password. The port is already set to `3306`.
+6. Create the web service. Its startup script waits for MySQL, runs the migrations, inserts sample records only when the tables are empty, and starts Apache.
+7. When the deploy becomes live, verify `/`, `/customers`, and `/users` from the assigned `onrender.com` URL.
+
+The free Render web service spins down after 15 minutes without traffic. A persistent MySQL service and disk are paid resources.

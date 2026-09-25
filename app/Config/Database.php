@@ -194,12 +194,26 @@ class Database extends Config
     {
         parent::__construct();
 
-        if (false !== getenv('MYSQLHOST')) {
-            $this->default['hostname'] = getenv('MYSQLHOST');
-            $this->default['username'] = getenv('MYSQLUSER') ?: '';
-            $this->default['password'] = getenv('MYSQLPASSWORD') ?: '';
-            $this->default['database'] = getenv('MYSQLDATABASE') ?: '';
-            $this->default['port']     = (int) (getenv('MYSQLPORT') ?: 3306);
+        $firstEnvironmentValue = static function (array $keys): string|false {
+            foreach ($keys as $key) {
+                $value = getenv($key);
+
+                if (false !== $value) {
+                    return $value;
+                }
+            }
+
+            return false;
+        };
+
+        $mysqlHost = $firstEnvironmentValue(['MYSQLHOST', 'MYSQL_HOST']);
+
+        if (false !== $mysqlHost) {
+            $this->default['hostname'] = $mysqlHost;
+            $this->default['username'] = $firstEnvironmentValue(['MYSQLUSER', 'MYSQL_USER']) ?: '';
+            $this->default['password'] = $firstEnvironmentValue(['MYSQLPASSWORD', 'MYSQL_PASSWORD']) ?: '';
+            $this->default['database'] = $firstEnvironmentValue(['MYSQLDATABASE', 'MYSQL_DATABASE']) ?: '';
+            $this->default['port']     = (int) ($firstEnvironmentValue(['MYSQLPORT', 'MYSQL_PORT']) ?: 3306);
         }
 
         // Ensure that we always set the database group to 'tests' if

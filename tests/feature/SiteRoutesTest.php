@@ -16,43 +16,63 @@ final class SiteRoutesTest extends CIUnitTestCase
     protected $basePath = APPPATH . 'Database';
     protected $seed = 'DatabaseSeeder';
 
-    public function testLandingPageLoads(): void
+    public function testWelcomePageShowsOnlyTodaysTasks(): void
     {
         $result = $this->get('/');
 
         $result->assertOK();
-        $result->assertSee('Rooted in tradition.');
+        $result->assertSee('Make space for');
+        $result->assertSee('Review daily priorities');
+        $result->assertSee('Submit the progress update');
+        $result->assertDontSee('Organize project reference files');
+        $result->assertDontSee('Plan tomorrow&#039;s development session');
     }
 
-    public function testAboutPageLoads(): void
+    public function testTaskListShowsEverySeededTask(): void
+    {
+        $result = $this->get('/tasks');
+
+        $result->assertOK();
+        $result->assertSee('Confirm completed requirements from yesterday');
+        $result->assertSee('Review daily priorities');
+        $result->assertSee('Archive finished project notes');
+        $result->assertSee('10');
+    }
+
+    public function testProfileShowsTheSingleDatabaseUser(): void
+    {
+        $result = $this->get('/profile');
+
+        $result->assertOK();
+        $result->assertSee('Gerard Doroja');
+        $result->assertSee('@gerard.doroja');
+        $result->assertSee('gerard.doroja@example.com');
+        $this->assertSame(1, db_connect()->table('users')->countAllResults());
+    }
+
+    public function testAboutPageIdentifiesTheDeveloper(): void
     {
         $result = $this->get('/about');
 
         $result->assertOK();
-        $result->assertSee('A coffeehouse with');
+        $result->assertSee('About the system');
+        $result->assertSee('Gerard Doroja');
+        $result->assertSee('IT0049 Web System Technologies');
     }
 
-    public function testCustomersPageListsDatabaseRecords(): void
+    public function testSeedDataMeetsRecordAndDateRequirements(): void
     {
-        $result = $this->get('/customers');
+        $database = db_connect();
+        $dateCount = $database->table('tasks')
+            ->select('task_date')
+            ->distinct()
+            ->countAllResults();
 
-        $result->assertOK();
-        $result->assertSee('Isabella Santos');
-        $result->assertSee('Gabriel Navarro');
-        $result->assertSee('Live database records');
-        $result->assertDontSee('Temporary static data');
-    }
-
-    public function testUsersPageListsDatabaseRecords(): void
-    {
-        $result = $this->get('/users');
-
-        $result->assertOK();
-        $result->assertSee('Ana Cruz');
-        $result->assertSee('Luis Dizon');
-        $result->assertSee('@ana.cruz');
-        $result->assertSee('Sep 1, 2026');
-        $result->assertSee('Live database records');
-        $result->assertDontSee('Temporary static data');
+        $this->assertGreaterThanOrEqual(8, $database->table('tasks')->countAllResults());
+        $this->assertGreaterThanOrEqual(3, $dateCount);
+        $this->assertSame(
+            4,
+            $database->table('tasks')->where('task_date', date('Y-m-d'))->countAllResults(),
+        );
     }
 }

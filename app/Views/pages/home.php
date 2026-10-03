@@ -1,65 +1,72 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<section class="hero">
-    <div class="shell hero-grid">
-        <div class="hero-copy reveal">
-            <span class="eyebrow">Heritage brews · Modern service</span>
-            <h1>Rooted in tradition.<br><em>Ready for every order.</em></h1>
-            <p class="hero-lede">A simple point-of-sale home for the people who make our coffeehouse feel like home—our guests and our team.</p>
+<?php
+$taskCount = count($tasks);
+$progress = $taskCount > 0 ? (int) round(($completed / $taskCount) * 100) : 0;
+$statusLabels = [
+    'pending'     => 'Pending',
+    'in_progress' => 'In progress',
+    'completed'   => 'Completed',
+];
+?>
+<section class="dashboard-hero">
+    <div class="shell dashboard-hero__grid">
+        <div class="reveal">
+            <span class="eyebrow">Daily dashboard</span>
+            <h1>Make space for<br><em>today.</em></h1>
+            <p class="hero-lede">A focused list of tasks scheduled for <?= esc(date('l, F j, Y', strtotime($today))) ?>.</p>
             <div class="hero-actions">
-                <a class="button button--primary" href="<?= site_url('customers') ?>">View customers <span>→</span></a>
-                <a class="button button--text" href="<?= site_url('about') ?>">Discover our story</a>
-            </div>
-            <div class="hero-proof" aria-label="Store highlights">
-                <div><strong>24</strong><span>local growers</span></div>
-                <div><strong>2019</strong><span>doors opened</span></div>
-                <div><strong>100%</strong><span>Philippine beans</span></div>
+                <a class="button button--primary" href="#today-tasks">View today’s tasks <span>↓</span></a>
+                <a class="button button--text" href="<?= site_url('tasks') ?>">See the full task list</a>
             </div>
         </div>
 
-        <div class="heritage-scene reveal reveal--late" aria-label="A stylized Filipino heritage coffeehouse facade">
-            <div class="sun-disc"></div>
-            <div class="leaf leaf--one"></div>
-            <div class="leaf leaf--two"></div>
-            <div class="house">
-                <div class="roof"><span></span></div>
-                <div class="upper-floor">
-                    <div class="capiz-window"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                    <div class="capiz-window"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                    <div class="capiz-window"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <aside class="day-summary reveal reveal--late" aria-label="Today’s task summary">
+            <div class="day-summary__date"><span><?= esc(date('M', strtotime($today))) ?></span><strong><?= esc(date('j', strtotime($today))) ?></strong></div>
+            <div class="day-summary__copy">
+                <small>Today’s progress</small>
+                <strong><?= $completed ?> of <?= $taskCount ?> complete</strong>
+                <div class="progress" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?= $progress ?>">
+                    <span style="width: <?= $progress ?>%"></span>
                 </div>
-                <div class="lower-floor">
-                    <div class="arch arch--window"></div>
-                    <div class="arch arch--door"><span>T</span></div>
-                    <div class="arch arch--window"></div>
-                </div>
-                <div class="house-step"></div>
+                <p><?= $progress ?>% of today’s work is finished.</p>
             </div>
-            <div class="counter-card">
-                <div class="counter-card__top"><span>Today’s counter</span><span class="live-dot">Live</span></div>
-                <div class="counter-total"><small>Orders served</small><strong>128</strong></div>
-                <div class="mini-bars" aria-hidden="true"><i style="--h:42%"></i><i style="--h:68%"></i><i style="--h:54%"></i><i style="--h:86%"></i><i style="--h:72%"></i><i style="--h:100%"></i><i style="--h:82%"></i></div>
-            </div>
-        </div>
+        </aside>
     </div>
 </section>
 
-<section class="home-links">
+<section id="today-tasks" class="task-section">
     <div class="shell">
-        <div class="section-kicker"><span>01</span><p>Quick access</p></div>
-        <div class="portal-grid">
-            <a class="portal-card portal-card--clay" href="<?= site_url('customers') ?>">
-                <span class="portal-icon" aria-hidden="true">☕</span>
-                <div><small>Guest directory</small><h2>Customer<br>Accounts</h2></div>
-                <span class="circle-arrow">↗</span>
-            </a>
-            <a class="portal-card portal-card--green" href="<?= site_url('users') ?>">
-                <span class="portal-icon" aria-hidden="true">✦</span>
-                <div><small>People behind the counter</small><h2>User<br>Accounts</h2></div>
-                <span class="circle-arrow">↗</span>
-            </a>
+        <div class="section-heading">
+            <div>
+                <span class="section-label">Today</span>
+                <h2>Your focused list</h2>
+            </div>
+            <span class="record-pill"><?= $taskCount ?> <?= $taskCount === 1 ? 'task' : 'tasks' ?></span>
         </div>
+
+        <?php if ($tasks === []): ?>
+            <div class="empty-panel">
+                <span aria-hidden="true">✓</span>
+                <h3>No tasks scheduled for today</h3>
+                <p>Everything is clear. Review the full list to see what is coming next.</p>
+                <a class="button button--primary" href="<?= site_url('tasks') ?>">Open all tasks <span>→</span></a>
+            </div>
+        <?php else: ?>
+            <div class="task-grid">
+                <?php foreach ($tasks as $index => $task): ?>
+                    <article class="task-card task-card--<?= esc($task['status']) ?> reveal">
+                        <div class="task-card__top">
+                            <span class="task-number"><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?></span>
+                            <span class="status status--<?= esc($task['status']) ?>"><?= esc($statusLabels[$task['status']] ?? ucfirst($task['status'])) ?></span>
+                        </div>
+                        <h3><?= esc($task['title']) ?></h3>
+                        <p>Scheduled for today</p>
+                    </article>
+                <?php endforeach ?>
+            </div>
+        <?php endif ?>
     </div>
 </section>
 <?= $this->endSection() ?>

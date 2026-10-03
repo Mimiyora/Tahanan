@@ -131,6 +131,46 @@ tbody tr:hover { background: #fdf9f1; }
 .facts dt { color: #7b8883; font-size: 9px; font-weight: 750; text-transform: uppercase; letter-spacing: .12em; }
 .facts dd { margin: 0; font-family: var(--serif); font-size: 19px; }
 
+.coffeehouse-hero { min-height: 650px; display: grid; align-items: center; overflow: hidden; background: radial-gradient(circle at 78% 42%, #eac795 0 19%, transparent 19.2%), var(--paper); border-bottom: 1px solid var(--line); }
+.coffeehouse-hero__grid { display: grid; grid-template-columns: 1fr .9fr; gap: 80px; align-items: center; padding-block: 85px; }
+.coffeehouse-hero h1 { margin: 21px 0 25px; font-family: var(--serif); font-size: clamp(50px, 5.4vw, 76px); font-weight: 400; letter-spacing: -.04em; line-height: .98; }
+.coffeehouse-stats { display: flex; gap: 28px; margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--line); }
+.coffeehouse-stats div { min-width: 100px; }
+.coffeehouse-stats strong { display: block; font-family: var(--serif); font-size: 27px; font-weight: 400; }
+.coffeehouse-stats span { color: var(--ink-soft); font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .11em; }
+.coffeehouse-emblem { min-height: 480px; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; color: var(--white); background: var(--ink); border-radius: 240px 240px 0 0; box-shadow: var(--shadow); }
+.coffeehouse-emblem__sun { position: absolute; top: 58px; width: 250px; height: 250px; background: repeating-conic-gradient(from 0deg, rgba(217, 166, 95, .26) 0 7deg, transparent 7deg 14deg); border-radius: 50%; }
+.coffeehouse-emblem__house { z-index: 1; width: 210px; margin-top: 35px; color: var(--gold); }
+.roof-line { display: block; width: 150px; height: 150px; margin: 0 auto -73px; border-top: 8px solid currentColor; border-left: 8px solid currentColor; transform: rotate(45deg); }
+.house-body { height: 145px; display: flex; align-items: end; justify-content: center; gap: 16px; padding: 32px 24px 0; border: 8px solid currentColor; }
+.house-body i { width: 38px; height: 75px; border: 5px solid currentColor; border-radius: 22px 22px 0 0; }
+.coffeehouse-emblem p { z-index: 2; margin: 30px 0 0; text-align: center; font-family: var(--serif); font-size: 25px; line-height: 1.2; }
+.coffeehouse-emblem em { color: #efc98f; }
+.coffeehouse-portals, .coffeehouse-story { padding: 90px 0 110px; }
+.portal-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+.portal-card { min-height: 270px; display: flex; flex-direction: column; justify-content: space-between; position: relative; padding: 34px; overflow: hidden; color: var(--white); text-decoration: none; transition: transform .2s ease; }
+.portal-card:hover { transform: translateY(-4px); }
+.portal-card--clay { background: var(--clay); }
+.portal-card--green { background: var(--ink); }
+.portal-card > span { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; opacity: .78; }
+.portal-card h3 { margin: 0; font-family: var(--serif); font-size: 42px; font-weight: 400; line-height: 1.05; }
+.portal-card b { position: absolute; top: 30px; right: 32px; width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid rgba(255, 255, 255, .55); border-radius: 50%; font-size: 18px; font-weight: 400; }
+.page-hero--coffeehouse { background: #eadcc7; }
+.coffeehouse-quote { padding: 80px 0; color: var(--white); background: var(--clay); text-align: center; }
+.coffeehouse-quote p { margin: 0; font-family: var(--serif); font-size: clamp(31px, 4vw, 50px); line-height: 1.2; }
+.coffeehouse-quote em { color: #f4d5aa; font-size: .65em; }
+.directory-hero--green { color: var(--white); background: var(--ink); }
+.directory-hero--green .eyebrow, .directory-hero--green em { color: var(--gold); }
+.directory-hero--green p, .directory-hero--green .record-count span { color: #abc0ba; }
+.directory-hero--green .record-count { border-color: rgba(217, 166, 95, .5); }
+.identity { display: flex; align-items: center; gap: 13px; color: var(--ink-deep); }
+.identity strong { font-weight: 650; }
+.avatar { width: 38px; height: 38px; display: grid; place-items: center; flex: 0 0 auto; color: var(--white); background: var(--clay); border-radius: 50%; font-family: var(--serif); font-size: 12px; }
+.avatar--green { background: var(--ink); }
+.username { color: var(--ink-soft); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+.role-badge { min-height: 27px; display: inline-flex; align-items: center; padding: 0 11px; color: var(--ink); background: #eee1ca; border-radius: 20px; font-size: 10px; font-weight: 700; }
+td a { text-decoration-color: var(--gold); text-underline-offset: 3px; }
+
 .site-footer { padding: 44px 0; color: #e9dfcc; background: var(--ink-deep); }
 .footer-grid { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .footer-brand { display: flex; align-items: center; gap: 14px; }
@@ -145,11 +185,12 @@ tbody tr:hover { background: #fdf9f1; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 
 @media (max-width: 900px) {
-    .dashboard-hero__grid, .profile-grid, .page-hero__grid, .about-grid { grid-template-columns: 1fr; gap: 50px; }
+    .dashboard-hero__grid, .profile-grid, .page-hero__grid, .about-grid, .coffeehouse-hero__grid { grid-template-columns: 1fr; gap: 50px; }
     .dashboard-hero { min-height: auto; }
     .dashboard-hero__grid { padding-block: 70px; }
     .page-hero__grid { align-items: start; }
     .page-intro { max-width: 650px; }
+    .coffeehouse-emblem { width: min(100%, 540px); margin-inline: auto; }
 }
 
 @media (max-width: 720px) {
@@ -161,6 +202,7 @@ tbody tr:hover { background: #fdf9f1; }
     .site-nav a { padding: 11px 4px; }
     .site-nav a::after { display: none; }
     .dashboard-hero h1, .page-hero h1, .directory-hero h1, .profile-intro h1 { font-size: 46px; }
+    .coffeehouse-hero h1 { font-size: 46px; }
     .hero-actions, .directory-tools, .footer-grid, .footer-note { align-items: flex-start; flex-direction: column; }
     .day-summary { grid-template-columns: 105px 1fr; }
     .day-summary__date { min-height: 205px; }
@@ -183,6 +225,7 @@ tbody tr:hover { background: #fdf9f1; }
     td:first-child::before { display: none; }
     .profile-card { padding: 28px; }
     .profile-details div, .facts div { grid-template-columns: 1fr; gap: 5px; }
+    .portal-grid { grid-template-columns: 1fr; }
     .footer-note { gap: 6px; }
 }
 

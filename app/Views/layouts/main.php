@@ -27,6 +27,7 @@
                 <a href="<?= site_url('tasks') ?>" class="<?= $currentPage === 'tasks' ? 'active' : '' ?>">All tasks</a>
                 <a href="<?= site_url('profile') ?>" class="<?= $currentPage === 'profile' ? 'active' : '' ?>">Profile</a>
                 <a href="<?= site_url('about') ?>" class="<?= $currentPage === 'about' ? 'active' : '' ?>">About</a>
+                <a href="<?= site_url('coffeehouse') ?>">Coffeehouse</a>
             </nav>
         </div>
     </header>

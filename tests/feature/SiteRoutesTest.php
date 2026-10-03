@@ -60,6 +60,33 @@ final class SiteRoutesTest extends CIUnitTestCase
         $result->assertSee('IT0049 Web System Technologies');
     }
 
+    public function testCoffeehouseLandingAndStoryRemainAvailable(): void
+    {
+        $landing = $this->get('/coffeehouse');
+        $story = $this->get('/coffeehouse/about');
+
+        $landing->assertOK();
+        $landing->assertSee('Rooted in tradition.');
+        $story->assertOK();
+        $story->assertSee('A coffeehouse with');
+    }
+
+    public function testCoffeehouseDirectoriesRemainAvailable(): void
+    {
+        $customers = $this->get('/customers');
+        $users = $this->get('/users');
+
+        $customers->assertOK();
+        $customers->assertSee('Isabella Santos');
+        $customers->assertSee('Gabriel Navarro');
+        $users->assertOK();
+        $users->assertSee('Ana Cruz');
+        $users->assertSee('Luis Dizon');
+        $this->assertSame(6, db_connect()->table('customers')->countAllResults());
+        $this->assertSame(6, db_connect()->table('staff_members')->countAllResults());
+        $this->assertSame(1, db_connect()->table('users')->countAllResults());
+    }
+
     public function testSeedDataMeetsRecordAndDateRequirements(): void
     {
         $database = db_connect();

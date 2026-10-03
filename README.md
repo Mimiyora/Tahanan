@@ -13,6 +13,13 @@ A database-backed CodeIgniter 4 application for tracking daily work. The welcome
 - `/profile` — profile for the single demo user
 - `/about` — system purpose, technology, course, and developer information
 
+The former Tahanan Coffee House portal remains available alongside the task system:
+
+- `/coffeehouse` — original coffeehouse landing experience
+- `/coffeehouse/about` — coffeehouse story
+- `/customers` — customer account directory
+- `/users` — coffeehouse team directory
+
 The interface is responsive and includes task statuses, daily completion progress, mobile navigation, and client-side search on the full task list.
 
 ## Database design
@@ -21,8 +28,10 @@ The application implements the assignment schema through CodeIgniter migrations:
 
 - `tasks`: `id`, `title`, `status`, `task_date`, `created_at`
 - `users`: `id`, `username`, `full_name`, `email`, `created_at`
+- `customers`: `id`, `full_name`, `email`, `phone`, `created_at`
+- `staff_members`: `id`, `username`, `full_name`, `created_at`
 
-`TaskSeeder` inserts ten records across five relative dates, including four records for the day the seeder runs. `UserSeeder` keeps exactly one demo user. The application timezone is `Asia/Manila`, so the dashboard and seeded “today” records use Philippine time.
+`TaskSeeder` inserts ten records across five relative dates, including four records for the day the seeder runs. `UserSeeder` keeps exactly one demo user for the assignment profile. The coffeehouse’s six team accounts are stored separately in `staff_members`, preserving the single-record `users` requirement. The application timezone is `Asia/Manila`, so the dashboard and seeded “today” records use Philippine time.
 
 The repository also includes a ready-to-import MySQL export at `database/tasks_for_today.sql`. It uses `CURDATE()` so imported sample data always includes the current date.
 
@@ -61,6 +70,7 @@ Requirements: PHP 8.2 or later, Composer, and MySQL.
 - `Pages::home()` obtains the current Asia/Manila date and requests only matching records through `TaskModel::forDate()`.
 - `Tasks::index()` retrieves all tasks through `TaskModel::ordered()`.
 - `Profile::index()` retrieves the one demo record through `UserModel`.
+- `Customers::index()` and `Users::index()` serve the retained coffeehouse directories through separate models and tables.
 - Views share `app/Views/layouts/main.php` and keep presentation separate from data access.
 
 ## Automated tests

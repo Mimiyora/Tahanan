@@ -33,4 +33,20 @@ class Pages extends BaseController
             'currentPage' => 'about',
         ]);
     }
+
+    public function coffeehouse(): string
+    {
+        return view('pages/coffeehouse', [
+            'title'       => 'Coffeehouse Home',
+            'currentPage' => 'coffeehouse',
+        ]);
+    }
+
+    public function coffeehouseAbout(): string
+    {
+        return view('pages/coffeehouse_about', [
+            'title'       => 'Our Story',
+            'currentPage' => 'coffeehouse-about',
+        ]);
+    }
 }

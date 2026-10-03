@@ -12,6 +12,14 @@ class DatabaseSeeder extends Seeder
             $this->call('TaskSeeder');
         }
 
+        if ($this->db->table('customers')->countAllResults() === 0) {
+            $this->call('CustomerSeeder');
+        }
+
+        if ($this->db->table('staff_members')->countAllResults() === 0) {
+            $this->call('StaffSeeder');
+        }
+
         $this->call('UserSeeder');
     }
 }

@@ -1,8 +1,9 @@
 FROM php:8.2-apache
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libicu-dev libonig-dev libzip-dev unzip \
-    && docker-php-ext-install intl mbstring mysqli zip \
+    && apt-get install -y --no-install-recommends libicu-dev libjpeg62-turbo-dev libonig-dev libpng-dev libzip-dev unzip \
+    && docker-php-ext-configure gd --with-jpeg \
+    && docker-php-ext-install gd intl mbstring mysqli zip \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
@@ -25,7 +26,7 @@ COPY docker/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY . /var/www/html
 
 RUN chmod +x /var/www/html/docker/entrypoint.sh \
-    && chown -R www-data:www-data /var/www/html/writable
+    && chown -R www-data:www-data /var/www/html/writable /var/www/html/public/uploads
 
 EXPOSE 8080
 

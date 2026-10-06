@@ -18,7 +18,12 @@ The former Tahanan Coffee House portal remains available alongside the task syst
 - `/coffeehouse` — original coffeehouse landing experience
 - `/coffeehouse/about` — coffeehouse story
 - `/customers` — customer account directory
-- `/users` — coffeehouse team directory
+- `/customers/new` — validated customer creation form
+- `/customers/{id}/edit` — pre-filled customer update form
+- `/users` — editable user-account directory with prepared avatars
+- `/users/new` — validated user creation form with unique usernames
+- `/users/{id}/edit` — pre-filled account and avatar update form
+- `/coffeehouse/team` — preserved legacy coffeehouse team directory
 
 The interface is responsive and includes task statuses, daily completion progress, mobile navigation, and client-side search on the full task list.
 
@@ -27,17 +32,23 @@ The interface is responsive and includes task statuses, daily completion progres
 The application implements the assignment schema through CodeIgniter migrations:
 
 - `tasks`: `id`, `title`, `status`, `task_date`, `created_at`
-- `users`: `id`, `username`, `full_name`, `email`, `created_at`
+- `users`: `id`, `username`, `full_name`, `email`, `avatar`, `created_at`
 - `customers`: `id`, `full_name`, `email`, `phone`, `created_at`
 - `staff_members`: `id`, `username`, `full_name`, `created_at`
 
-`TaskSeeder` inserts ten records across five relative dates, including four records for the day the seeder runs. `UserSeeder` keeps exactly one demo user for the assignment profile. The coffeehouse’s six team accounts are stored separately in `staff_members`, preserving the single-record `users` requirement. The application timezone is `Asia/Manila`, so the dashboard and seeded “today” records use Philippine time.
+`TaskSeeder` inserts ten records across five relative dates, including four records for the day the seeder runs. `UserSeeder` adds one demo user to a fresh database without deleting accounts created later. The coffeehouse’s six former team records remain separately in `staff_members`. The application timezone is `Asia/Manila`, so the dashboard and seeded “today” records use Philippine time.
+
+## Forms, validation, and avatar upload
+
+Customer and user create/edit actions use explicit GET and POST routes, controller-side validation, redirect-with-input behavior, and field-level error messages. Customer names and valid email addresses are required. Usernames are required, restricted to safe account characters, and enforced as unique at both the validation and database levels.
+
+The user edit form accepts JPG and PNG profile pictures no larger than 2 MB. CodeIgniter verifies the upload, creates a centered 320 × 320 display image with its Image service, writes it to `public/uploads/avatars`, and stores only the generated filename in `users.avatar`. The listing uses the prepared image or a bundled placeholder. Uploaded files are intentionally excluded from Git.
 
 The repository also includes a ready-to-import MySQL export at `database/tasks_for_today.sql`. It uses `CURDATE()` so imported sample data always includes the current date.
 
 ## Local setup
 
-Requirements: PHP 8.2 or later, Composer, and MySQL.
+Requirements: PHP 8.2 or later with Fileinfo and GD enabled, Composer, and MySQL.
 
 1. Install dependencies:
 
@@ -70,7 +81,9 @@ Requirements: PHP 8.2 or later, Composer, and MySQL.
 - `Pages::home()` obtains the current Asia/Manila date and requests only matching records through `TaskModel::forDate()`.
 - `Tasks::index()` retrieves all tasks through `TaskModel::ordered()`.
 - `Profile::index()` retrieves the one demo record through `UserModel`.
-- `Customers::index()` and `Users::index()` serve the retained coffeehouse directories through separate models and tables.
+- `Customers` provides validated list, create, edit, and update actions through `CustomerModel`.
+- `Users` provides validated account management and safe avatar preparation through `UserModel`.
+- `Users::legacy()` retains the former six-record `staff_members` directory at `/coffeehouse/team`.
 - Views share `app/Views/layouts/main.php` and keep presentation separate from data access.
 
 ## Automated tests

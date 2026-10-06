@@ -13,3 +13,5 @@
 /writable/uploads/*
 !/writable/uploads/index.html
 /writable/*.db
+/public/uploads/avatars/*
+!/public/uploads/avatars/index.html

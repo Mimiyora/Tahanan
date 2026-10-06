@@ -26,7 +26,8 @@
                 <a href="<?= site_url('coffeehouse') ?>" class="<?= $currentPage === 'coffeehouse' ? 'active' : '' ?>">Home</a>
                 <a href="<?= site_url('coffeehouse/about') ?>" class="<?= $currentPage === 'coffeehouse-about' ? 'active' : '' ?>">Our story</a>
                 <a href="<?= site_url('customers') ?>" class="<?= $currentPage === 'customers' ? 'active' : '' ?>">Customers</a>
-                <a href="<?= site_url('users') ?>" class="<?= $currentPage === 'users' ? 'active' : '' ?>">Team</a>
+                <a href="<?= site_url('users') ?>" class="<?= $currentPage === 'users' ? 'active' : '' ?>">Users</a>
+                <a href="<?= site_url('coffeehouse/team') ?>" class="<?= $currentPage === 'legacy-team' ? 'active' : '' ?>">Legacy team</a>
                 <a href="<?= site_url('/') ?>">Tasks</a>
             </nav>
         </div>

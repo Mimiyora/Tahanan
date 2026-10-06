@@ -20,12 +20,16 @@
                 <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16 16 5 5"></path></svg>
                 <input type="search" data-table-search="customer-table" placeholder="Search customer records…">
             </label>
-            <span class="data-note"><i></i> Live database records</span>
+            <a class="button button--primary button--compact" href="<?= site_url('customers/new') ?>">New customer <span>+</span></a>
         </div>
+
+        <?php if (session('success')): ?>
+            <div class="notice notice--success" role="status"><?= esc(session('success')) ?></div>
+        <?php endif ?>
 
         <div class="table-card reveal reveal--late">
             <table id="customer-table">
-                <thead><tr><th>Customer</th><th>Email address</th><th>Phone number</th></tr></thead>
+                <thead><tr><th>Customer</th><th>Email address</th><th>Phone number</th><th><span class="sr-only">Actions</span></th></tr></thead>
                 <tbody>
                 <?php foreach ($customers as $customer): ?>
                     <?php $phone = $customer['phone'] ?: 'Not provided'; ?>
@@ -39,6 +43,7 @@
                                 <?= esc($phone) ?>
                             <?php endif ?>
                         </td>
+                        <td data-label="Action"><a class="table-action" href="<?= site_url('customers/' . $customer['id'] . '/edit') ?>">Edit</a></td>
                     </tr>
                 <?php endforeach ?>
                 </tbody>

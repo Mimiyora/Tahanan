@@ -27,6 +27,7 @@ CREATE TABLE `users` (
     `username` VARCHAR(50) NOT NULL,
     `full_name` VARCHAR(100) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
+    `avatar` VARCHAR(255) NULL,
     `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `users_username_unique` (`username`)
@@ -62,8 +63,8 @@ INSERT INTO `tasks` (`title`, `status`, `task_date`, `created_at`) VALUES
 ('Update the weekly task summary', 'pending', DATE_ADD(CURDATE(), INTERVAL 3 DAY), TIMESTAMP(CURDATE(), '08:30:00')),
 ('Archive finished project notes', 'pending', DATE_ADD(CURDATE(), INTERVAL 7 DAY), TIMESTAMP(CURDATE(), '08:45:00'));
 
-INSERT INTO `users` (`username`, `full_name`, `email`, `created_at`) VALUES
-('gerard.doroja', 'Gerard Doroja', 'gerard.doroja@example.com', NOW());
+INSERT INTO `users` (`username`, `full_name`, `email`, `avatar`, `created_at`) VALUES
+('gerard.doroja', 'Gerard Doroja', 'gerard.doroja@example.com', NULL, NOW());
 
 INSERT INTO `customers` (`full_name`, `email`, `phone`, `created_at`) VALUES
 ('Isabella Santos', 'isabella.santos@example.com', '+63 917 234 0182', '2026-09-01 09:15:00'),

@@ -1,46 +1,40 @@
 <?= $this->extend('layouts/coffeehouse') ?>
 
 <?= $this->section('content') ?>
-<section class="coffeehouse-hero">
-    <div class="shell coffeehouse-hero__grid">
-        <div class="reveal">
-            <span class="eyebrow">Heritage brews · Modern service</span>
-            <h1>Rooted in tradition.<br><em>Ready for every order.</em></h1>
-            <p class="hero-lede">A simple point-of-sale home for the people who make our coffeehouse feel like home—our guests and our team.</p>
+<section class="coffee-hero">
+    <div class="shell coffee-hero__grid">
+        <div class="coffee-hero__copy">
+            <p class="context-line">Philippine coffee, served like home</p>
+            <h1>Rooted in tradition. Ready for the day.</h1>
+            <p class="hero-lede">Tahanan brings locally grown coffee, generous service, and the quiet warmth of a Filipino home to one shared table.</p>
             <div class="hero-actions">
-                <a class="button button--primary" href="<?= site_url('customers') ?>">View customers <span>→</span></a>
-                <a class="button button--text" href="<?= site_url('coffeehouse/about') ?>">Discover our story</a>
+                <a class="button button--primary" href="<?= site_url('coffeehouse/about') ?>">Read our story</a>
+                <?php if (session()->get('isLoggedIn') === true): ?>
+                    <a class="text-link" href="<?= site_url('customers') ?>">Open customer accounts</a>
+                <?php else: ?>
+                    <a class="text-link" href="<?= site_url('login') ?>">Staff log in</a>
+                <?php endif ?>
             </div>
-            <div class="coffeehouse-stats" aria-label="Store highlights">
-                <div><strong>24</strong><span>local growers</span></div>
-                <div><strong>2019</strong><span>doors opened</span></div>
-                <div><strong>100%</strong><span>Philippine beans</span></div>
-            </div>
+            <dl class="coffee-facts" aria-label="Coffee House highlights">
+                <div><dt>24</dt><dd>local growers</dd></div>
+                <div><dt>2019</dt><dd>doors opened</dd></div>
+                <div><dt>100%</dt><dd>Philippine beans</dd></div>
+            </dl>
         </div>
-
-        <div class="coffeehouse-emblem reveal reveal--late" aria-label="Tahanan Coffee House identity">
-            <div class="coffeehouse-emblem__sun"></div>
-            <div class="coffeehouse-emblem__house" aria-hidden="true">
-                <span class="roof-line"></span>
-                <span class="house-body"><i></i><i></i><i></i></span>
-            </div>
-            <p>Grown here.<br><em>Served like home.</em></p>
-        </div>
+        <figure class="coffee-hero__image capiz-photo">
+            <img src="<?= base_url('assets/images/tahanan-hero.webp') ?>" alt="Bright Tahanan Coffee House interior with barako coffee, warm wood, and capiz windows">
+        </figure>
     </div>
 </section>
 
-<section class="coffeehouse-portals">
-    <div class="shell">
-        <div class="section-heading">
-            <div><span class="section-label">Quick access</span><h2>People at Tahanan</h2></div>
-        </div>
-        <div class="portal-grid">
-            <a class="portal-card portal-card--clay" href="<?= site_url('customers') ?>">
-                <span>Guest directory</span><h3>Customer<br>Accounts</h3><b>↗</b>
-            </a>
-            <a class="portal-card portal-card--green" href="<?= site_url('users') ?>">
-                <span>People behind the counter</span><h3>User<br>Accounts</h3><b>↗</b>
-            </a>
+<section class="welcome-section">
+    <div class="shell welcome-grid">
+        <div class="welcome-copy"><p class="context-line">One house, two ways in</p><h2>Come for the coffee. Stay for the people.</h2><p>Guests can learn our story and meet the legacy team. Signed-in staff can keep customer and user accounts close at hand.</p></div>
+        <div class="portal-list">
+            <a href="<?= site_url('coffeehouse/about') ?>"><span>Our story</span><strong>How Tahanan came home</strong></a>
+            <a href="<?= site_url('coffeehouse/team') ?>"><span>Legacy team</span><strong>Meet the original six</strong></a>
+            <a href="<?= site_url('customers') ?>"><span>Customer accounts</span><strong>Care for the guest directory</strong></a>
+            <a href="<?= site_url('users') ?>"><span>User accounts</span><strong>Manage the people behind the counter</strong></a>
         </div>
     </div>
 </section>

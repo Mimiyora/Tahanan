@@ -4,68 +4,64 @@
 <?php
 $taskCount = count($tasks);
 $progress = $taskCount > 0 ? (int) round(($completed / $taskCount) * 100) : 0;
-$statusLabels = [
-    'pending'     => 'Pending',
-    'in_progress' => 'In progress',
-    'completed'   => 'Completed',
-];
+$statusLabels = ['pending' => 'Pending', 'in_progress' => 'In progress', 'completed' => 'Completed'];
 ?>
-<section class="dashboard-hero">
-    <div class="shell dashboard-hero__grid">
-        <div class="reveal">
-            <span class="eyebrow">Daily dashboard</span>
-            <h1>Make space for<br><em>today.</em></h1>
-            <p class="hero-lede">A focused list of tasks scheduled for <?= esc(date('l, F j, Y', strtotime($today))) ?>.</p>
+<section class="today-hero">
+    <div class="shell today-hero__grid">
+        <div class="hero-copy">
+            <p class="context-line">Tahanan Today · <?= esc(date('l, F j, Y', strtotime($today))) ?></p>
+            <h1>Make space for today.</h1>
+            <p class="hero-lede">A clear view of the work that keeps the coffeehouse welcoming, prepared, and moving together.</p>
             <div class="hero-actions">
-                <a class="button button--primary" href="#today-tasks">View today’s tasks <span>↓</span></a>
-                <a class="button button--text" href="<?= site_url('tasks') ?>">See the full task list</a>
+                <a class="button button--primary" href="#today-tasks">View today’s tasks</a>
+                <a class="text-link" href="<?= site_url('tasks') ?>">See the full schedule</a>
                 <?php if (session()->get('isLoggedIn') === true): ?>
-                    <a class="button button--text" href="<?= site_url('tasks/new') ?>">Add a task</a>
+                    <a class="text-link" href="<?= site_url('tasks/new') ?>">Add a task</a>
                 <?php endif ?>
             </div>
         </div>
 
-        <aside class="day-summary reveal reveal--late" aria-label="Today’s task summary">
-            <div class="day-summary__date"><span><?= esc(date('M', strtotime($today))) ?></span><strong><?= esc(date('j', strtotime($today))) ?></strong></div>
-            <div class="day-summary__copy">
-                <small>Today’s progress</small>
-                <strong><?= $completed ?> of <?= $taskCount ?> complete</strong>
-                <div class="progress" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?= $progress ?>">
-                    <span style="width: <?= $progress ?>%"></span>
+        <div class="capiz-feature">
+            <figure class="capiz-feature__photo">
+                <img src="<?= base_url('assets/images/tahanan-hero.webp') ?>" alt="A ceramic cup of barako coffee on a sunlit wood counter beside capiz windows">
+            </figure>
+            <aside class="today-summary" aria-label="Today’s task summary">
+                <time class="today-summary__date" datetime="<?= esc($today) ?>">
+                    <strong><?= esc(date('j', strtotime($today))) ?></strong>
+                    <span><?= esc(date('F', strtotime($today))) ?></span>
+                </time>
+                <div class="today-summary__progress">
+                    <div class="summary-copy"><span>Today’s progress</span><strong><?= $completed ?> of <?= $taskCount ?> complete</strong></div>
+                    <div class="progress" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?= $progress ?>">
+                        <span style="width: <?= $progress ?>%"></span>
+                    </div>
+                    <p><?= $progress ?>% finished</p>
                 </div>
-                <p><?= $progress ?>% of today’s work is finished.</p>
-            </div>
-        </aside>
+            </aside>
+        </div>
     </div>
 </section>
 
 <section id="today-tasks" class="task-section">
     <div class="shell">
         <div class="section-heading">
-            <div>
-                <span class="section-label">Today</span>
-                <h2>Your focused list</h2>
-            </div>
-            <span class="record-pill"><?= $taskCount ?> <?= $taskCount === 1 ? 'task' : 'tasks' ?></span>
+            <div><p class="context-line">Today’s work</p><h2>Keep the house in rhythm</h2></div>
+            <span class="record-count-inline"><?= $taskCount ?> <?= $taskCount === 1 ? 'task' : 'tasks' ?></span>
         </div>
 
         <?php if ($tasks === []): ?>
             <div class="empty-panel">
-                <span aria-hidden="true">✓</span>
-                <h3>No tasks scheduled for today</h3>
-                <p>Everything is clear. Review the full list to see what is coming next.</p>
-                <a class="button button--primary" href="<?= site_url('tasks') ?>">Open all tasks <span>→</span></a>
+                <span class="empty-panel__mark" aria-hidden="true">✓</span>
+                <div><h3>No tasks scheduled for today</h3><p>Everything is clear. Review the full schedule to see what comes next.</p></div>
+                <a class="button button--primary" href="<?= site_url('tasks') ?>">Open all tasks</a>
             </div>
         <?php else: ?>
-            <div class="task-grid">
-                <?php foreach ($tasks as $index => $task): ?>
-                    <article class="task-card task-card--<?= esc($task['status']) ?> reveal">
-                        <div class="task-card__top">
-                            <span class="task-number"><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?></span>
-                            <span class="status status--<?= esc($task['status']) ?>"><?= esc($statusLabels[$task['status']] ?? ucfirst($task['status'])) ?></span>
-                        </div>
-                        <h3><?= esc($task['title']) ?></h3>
-                        <p>Scheduled for today</p>
+            <div class="task-ledger">
+                <?php foreach ($tasks as $task): ?>
+                    <article class="task-row task-row--<?= esc($task['status']) ?>">
+                        <span class="task-row__state" aria-hidden="true"></span>
+                        <div class="task-row__copy"><h3><?= esc($task['title']) ?></h3><p>Scheduled for today</p></div>
+                        <span class="status status--<?= esc($task['status']) ?>"><?= esc($statusLabels[$task['status']] ?? ucfirst($task['status'])) ?></span>
                     </article>
                 <?php endforeach ?>
             </div>

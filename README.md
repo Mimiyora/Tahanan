@@ -1,134 +1,91 @@
-# Tasks for Today Management System
+# Tahanan Coffee House
 
-A database-backed CodeIgniter 4 application for tracking daily work. The welcome page filters the shared `tasks` table to the current date, while the full task list displays every record in date order.
+Tahanan is a responsive CodeIgniter 4 coffee-house workspace that brings the public brand, today dashboard, task planning, customer records, user accounts, avatars, and staff authentication into one interface.
 
-- GitHub repository: [github.com/Mimiyora/Tahanan](https://github.com/Mimiyora/Tahanan)
-- Deployment target: Vercel configuration pending
+- Repository: [github.com/Mimiyora/Tahanan](https://github.com/Mimiyora/Tahanan)
 - Developer: Gerard Doroja
 
-## Required pages
+## Experience and routes
 
-- `/` — welcome dashboard showing only tasks scheduled for today
-- `/tasks` — complete task list ordered by scheduled date
-- `/tasks/new` — authenticated task creation form
-- `/tasks/{id}/edit` — authenticated task update form
-- `/profile` — profile for the single demo user
-- `/about` — system purpose, technology, course, and developer information
+The redesign uses a warm Filipino coffee-house direction: locally served Fraunces and Lora typography, bright natural-light photography, capiz-window geometry, rice-paper backgrounds, espresso structure, clay accents, and sage operational states. It remains usable with a keyboard, respects reduced-motion preferences, and adapts from wide desktop tables to compact mobile records.
 
-The former Tahanan Coffee House portal remains available alongside the task system:
+Public routes:
 
-- `/coffeehouse` — original coffeehouse landing experience
-- `/coffeehouse/about` — coffeehouse story
-- `/customers` — customer account directory
-- `/customers/new` — validated customer creation form
-- `/customers/{id}/edit` — pre-filled customer update form
-- `/users` — editable user-account directory with prepared avatars
-- `/users/new` — validated user creation form with unique usernames
-- `/users/{id}/edit` — pre-filled account and avatar update form
-- `/coffeehouse/team` — preserved legacy coffeehouse team directory
-- `/login` — authentication form for protected task and account-management actions
+- `/` — “Tahanan Today,” with the Manila date, completion progress, and only today’s active tasks
+- `/tasks` — every active task in scheduled-date order, with client-side search
+- `/profile` — the seeded user profile
+- `/about` — project purpose, technology, course, and developer information
+- `/coffeehouse` — the customer-facing Coffee House landing page
+- `/coffeehouse/about` — the Coffee House story
+- `/login` — staff authentication
 
-The interface is responsive and includes task statuses, daily completion progress, mobile navigation, and client-side search on the full task list.
+Authenticated management routes:
 
-## Database design
+- `/tasks/new` and `/tasks/{id}/edit` — create, update, and archive tasks
+- `/customers`, `/customers/new`, and `/customers/{id}/edit` — customer records
+- `/users`, `/users/new`, and `/users/{id}/edit` — user accounts and avatars
+- `/coffeehouse/team` — the preserved legacy six-person staff directory
 
-The application implements the assignment schema through CodeIgniter migrations:
+## Preserved application behavior
 
-- `tasks`: `id`, `title`, `status`, `task_date`, `is_archived`, `created_at`
-- `users`: `id`, `username`, `full_name`, `email`, `avatar`, `password`, `created_at`
-- `customers`: `id`, `full_name`, `email`, `phone`, `created_at`
-- `staff_members`: `id`, `username`, `full_name`, `created_at`
+- The home query is limited to the current `Asia/Manila` date; the complete list includes every active date.
+- Task status, progress, required-field validation, redirect-with-input behavior, and soft deletion remain intact.
+- Protected routes remember the requested destination, require a valid session, and accept logout only through a CSRF-protected POST form.
+- Customer email validation and user username uniqueness remain enforced.
+- Passwords are hashed with `password_hash()` and checked with `password_verify()`.
+- New avatars accept JPG or PNG files up to 2 MB. The browser prepares a centered 320 × 320 image before submission; the server validates the image and retains a server-side crop fallback where an image driver is available.
+- Avatars are stored locally in `public/uploads/avatars`, while only the generated filename is saved in the user record.
 
-`TaskSeeder` inserts ten records across five relative dates, including four records for the day the seeder runs. `UserSeeder` adds one demo user to a fresh database without deleting accounts created later. The coffeehouse’s six former team records remain separately in `staff_members`. The application timezone is `Asia/Manila`, so the dashboard and seeded “today” records use Philippine time.
-
-## Sessions and authentication
-
-The Welcome, Task List, Profile, and About pages remain public. Creating, editing, updating, or archiving a task is protected by a CodeIgniter before filter; the existing customer and user management routes remain protected as well. Logged-out visitors are redirected to `/login`; after a successful login, the session stores the authenticated user ID, username, and display name and returns the user to the protected page they originally requested. Logging out destroys the session and returns to the login page.
-
-The seeded demonstration credentials are:
+The seeded demonstration login is:
 
 - Username: `gerard.doroja`
 - Password: `Tahanan123!`
 
-Passwords are never stored as plain text. The migration and seeders use `password_hash()`, login uses `password_verify()`, and newly created or changed user passwords are hashed before database storage.
+Change or remove these credentials before using the application beyond a demonstration environment.
 
-## CRUD, validation, and soft deletion
+## Data model
 
-Task create and edit forms validate a required title and task date and accept only the supported statuses. The archive action performs a soft deletion by setting `is_archived` to `1`; archived rows remain in the database but are excluded from both the Welcome page and the public Task List.
+CodeIgniter migrations manage:
 
-Customer and user create/edit actions use explicit GET and POST routes, controller-side validation, redirect-with-input behavior, and field-level error messages. Customer names and valid email addresses are required. Usernames are required, restricted to safe account characters, and enforced as unique at both the validation and database levels. New user accounts require passwords of at least eight characters; edits retain the current password unless a replacement is entered.
+- `tasks`: task content, status, schedule date, and archive state
+- `users`: login, contact, avatar, and password data
+- `customers`: customer contact records
+- `staff_members`: the preserved legacy team
 
-The user edit form accepts JPG and PNG profile pictures no larger than 2 MB. CodeIgniter verifies the upload, creates a centered 320 × 320 display image with its Image service, writes it to `public/uploads/avatars`, and stores only the generated filename in `users.avatar`. The listing uses the prepared image or a bundled placeholder. Uploaded files are intentionally excluded from Git.
-
-The repository also includes a ready-to-import MySQL export at `database/tasks_for_today.sql`. It uses `CURDATE()` so imported sample data always includes the current date.
+`DatabaseSeeder` inserts the complete demonstration dataset. `database/tasks_for_today.sql` remains available as a MySQL import and uses `CURDATE()` for current-day sample work.
 
 ## Local setup
 
-Requirements: PHP 8.2 or later with Fileinfo and GD enabled, Composer, and MySQL.
+Requirements: PHP 8.2+, Composer, Fileinfo, MySQLi, and an image extension supported by CodeIgniter for server-side avatar fallback. The automated suite additionally needs SQLite3.
 
-1. Install dependencies:
+1. Install dependencies.
 
    ```bash
    composer install
    ```
 
-2. Copy `env` to `.env`. The template uses a local MySQL database named `tahanan_tasks` with the default XAMPP `root` account and a blank password. Update the credentials if your environment differs.
+2. Copy `env` to `.env` and set the local base URL and database values. The supplied template targets a local MySQL database named `tahanan_tasks`; a SQLite `.env` can also be used for local development.
 
-3. Create the database, run the migrations, and seed the records:
+3. Create, migrate, and seed the database.
 
    ```bash
    php spark db:create tahanan_tasks
-   php spark migrate
+   php spark migrate --all
    php spark db:seed DatabaseSeeder
    ```
 
-   Alternatively, import `database/tasks_for_today.sql` with phpMyAdmin or the MySQL command line.
-
-4. Start the application:
+4. Start the site and open [http://localhost:8091](http://localhost:8091).
 
    ```bash
    php spark serve --port 8091
    ```
 
-5. Open [http://localhost:8091](http://localhost:8091).
+## Tests
 
-## Application structure
-
-- `Pages::home()` obtains the current Asia/Manila date and requests only matching records through `TaskModel::forDate()`.
-- `Tasks` provides the active task list plus authenticated create, edit, update, and soft-delete actions through `TaskModel`.
-- `Profile::index()` retrieves the one demo record through `UserModel`.
-- `Customers` provides validated list, create, edit, and update actions through `CustomerModel`.
-- `Users` provides validated account management and safe avatar preparation through `UserModel`.
-- `Auth` verifies hashed user credentials, starts and destroys login sessions, and redirects authenticated users safely.
-- `AuthFilter` protects task management actions and the existing customer and user management routes.
-- `Users::legacy()` retains the former six-record `staff_members` directory at `/coffeehouse/team`.
-- Views share `app/Views/layouts/main.php` and keep presentation separate from data access.
-
-## Automated tests
-
-The feature suite uses an in-memory SQLite database, applies the project migrations and seeders, and verifies:
-
-- the welcome page includes today’s records and excludes past and future tasks;
-- the full task page includes all ten active sample records;
-- the profile displays exactly one database user;
-- the About page identifies the developer; and
-- the seed data spans at least three dates and contains at least eight tasks;
-- unauthenticated requests are redirected to login; and
-- valid credentials create an authenticated session while invalid credentials remain rejected;
-- task management routes reject guests and accept authenticated users;
-- task validation rejects incomplete data; and
-- archiving retains the row while removing it from both public task pages.
-
-Run the suite with:
+The feature suite uses an isolated in-memory SQLite database. It covers public route content, date filtering, seeded records, authentication, protected task management, validation, archiving, and customer and user workflows.
 
 ```bash
 composer test
 ```
 
-The PHP CLI used for testing must have the SQLite3 extension enabled.
-
-## Deployment
-
-The repository is prepared for a future Vercel deployment, but the Vercel function entry point and `vercel.json` configuration have not been added yet. Vercel runs PHP through the community `vercel-php` runtime rather than a persistent Apache container.
-
-Use an external MySQL database and configure `MYSQLHOST`, `MYSQLPORT`, `MYSQLDATABASE`, `MYSQLUSER`, `MYSQLPASSWORD`, and `app_baseURL` as Vercel environment variables. Vercel Functions have a read-only deployment filesystem with temporary `/tmp` storage, so production sessions and uploaded avatars must use persistent external storage before deployment.
+When SQLite is installed but disabled in the CLI configuration, enable it for the command (for example, `php -d extension=sqlite3 vendor/bin/phpunit` on the bundled Windows setup).

@@ -2,9 +2,11 @@
 
 ## Copy This Prompt Into the New Conversation
 
-Redesign the complete frontend of this CodeIgniter 4 project. Read `PROJECT_FEATURE_OVERVIEW.md` first, then inspect the routes, controllers, views, stylesheet, JavaScript, and feature tests before editing.
+Use the `$frontend-design` skill to redesign the complete frontend of this CodeIgniter 4 project. Read `PROJECT_FEATURE_OVERVIEW.md` and this entire handoff first, then inspect the routes, controllers, views, stylesheet, JavaScript, and feature tests before editing.
 
 The new design must be a modern, bright, and welcoming Coffee House website. Use warm natural-light coffee photography, warm ivory backgrounds, espresso brown, muted terracotta, and soft sage. Use serif typography throughout; do not use sans-serif fonts. Use an expressive serif for headings and a highly readable serif for body text, forms, tables, and navigation.
+
+Follow the frontend-design skill's two-pass process. Before writing code, produce a compact design plan covering a 4–6 color token system, deliberate serif type choices and roles, layout and alignment rules, one or more small ASCII wireframes, and principles specific to Tahanan. Critique that plan against the brief and revise anything that looks like a generic Coffee House template or a predictable AI-generated cream-and-terracotta layout. Then implement the revised plan without waiting for another approval unless a material requirement is genuinely missing.
 
 Unify the Tasks for Today and Coffee House sections into one consistent Tahanan Coffee House identity. The `/` route must remain the required Welcome page and must continue showing tasks scheduled for the current date. Present it as “Tahanan Today”: use a bright photographic hero, show the date and task progress above the fold, and place today’s tasks immediately below it. The activity requirements take priority over decorative marketing content.
 
@@ -20,6 +22,26 @@ The completed project must be deployable to Vercel. Treat the Vercel deployment 
 
 After implementation, run the complete test suite, update only copy-sensitive test assertions when the redesigned wording intentionally changes, lint the PHP files, and manually verify guest and authenticated flows at desktop and mobile widths. Keep the working tree free of generated QA artifacts.
 
+Take screenshots of the implemented pages during review. Critique hierarchy, typography, spacing, photography, responsive behavior, and consistency from the screenshots, then iterate before considering the redesign finished.
+
+## Required Skill
+
+Invoke `$frontend-design` explicitly in the new conversation. The skill should shape the design process and frontend implementation, while this handoff remains the authority for project behavior and required feature preservation.
+
+Use the skill to:
+
+- Ground the interface in Tahanan's actual subject: a Philippine Coffee House with a daily staff task workspace.
+- Create an intentional token system rather than copying the current palette mechanically.
+- Select distinctive, readable serif typefaces for both expressive and data-dense interfaces.
+- Compare layout ideas with concise ASCII wireframes before implementation.
+- Identify and remove template-like design habits.
+- Use structural devices only when they communicate real information.
+- Keep one memorable visual idea and make the rest of the interface disciplined.
+- Use motion mainly to explain user-triggered changes.
+- Review screenshots and revise the implemented result.
+
+Do not let the skill override route behavior, validation, authentication, CRUD, uploads, accessibility, testing, or deployment requirements in this handoff.
+
 ## Agreed Visual Direction
 
 - Bright and welcoming rather than dark or moody.
@@ -32,6 +54,9 @@ After implementation, run the complete test suite, update only copy-sensitive te
 - Consistent components across public and management pages.
 - Subtle motion with reduced-motion support.
 - Strong keyboard focus, contrast, labels, and responsive behavior.
+- One distinctive visual idea rooted in Philippine Coffee House culture rather than generic café decoration.
+- No automatic all-caps eyebrow above every heading, decorative numbering, repetitive rounded cards, or scattered reveal animations.
+- Interface copy should use plain, consistent action language and sentence case.
 
 ## Required Feature Preservation Checklist
 

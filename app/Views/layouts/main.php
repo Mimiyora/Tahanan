@@ -28,6 +28,14 @@
                 <a href="<?= site_url('profile') ?>" class="<?= $currentPage === 'profile' ? 'active' : '' ?>">Profile</a>
                 <a href="<?= site_url('about') ?>" class="<?= $currentPage === 'about' ? 'active' : '' ?>">About</a>
                 <a href="<?= site_url('coffeehouse') ?>">Coffeehouse</a>
+                <?php if (session()->get('isLoggedIn') === true): ?>
+                    <form class="nav-auth" action="<?= site_url('logout') ?>" method="post">
+                        <?= csrf_field() ?>
+                        <button type="submit">Log out</button>
+                    </form>
+                <?php else: ?>
+                    <a href="<?= site_url('login') ?>">Log in</a>
+                <?php endif ?>
             </nav>
         </div>
     </header>

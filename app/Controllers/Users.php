@@ -44,12 +44,14 @@ class Users extends BaseController
     public function create()
     {
         $data = $this->userData();
+        $password = (string) $this->request->getPost('password');
 
-        if (! $this->validateData($data, $this->userRules())) {
+        if (! $this->validateData([...$data, 'password' => $password], $this->userRules())) {
             return redirect()->to(site_url('users/new'))->withInput()->with('errors', $this->validator->getErrors());
         }
 
         $data['created_at'] = date('Y-m-d H:i:s');
+        $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         $id = (new UserModel())->insert($data, true);
 
         return redirect()->to(site_url('users/' . $id . '/edit'))
@@ -98,6 +100,11 @@ class Users extends BaseController
         }
 
         $data = $this->userData();
+        $password = (string) $this->request->getPost('password');
+
+        if ($password !== '') {
+            $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+        }
         $newAvatar = null;
 
         try {
@@ -165,6 +172,10 @@ class Users extends BaseController
             ],
             'full_name' => ['label' => 'Full name', 'rules' => 'required|min_length[2]|max_length[100]'],
             'email'     => ['label' => 'Email address', 'rules' => 'required|valid_email|max_length[100]'],
+            'password'  => [
+                'label' => 'Password',
+                'rules' => ($id === null ? 'required|' : 'permit_empty|') . 'min_length[8]|max_length[72]',
+            ],
         ];
     }
 

@@ -19,6 +19,9 @@ $statusLabels = [
             <div class="hero-actions">
                 <a class="button button--primary" href="#today-tasks">View today’s tasks <span>↓</span></a>
                 <a class="button button--text" href="<?= site_url('tasks') ?>">See the full task list</a>
+                <?php if (session()->get('isLoggedIn') === true): ?>
+                    <a class="button button--text" href="<?= site_url('tasks/new') ?>">Add a task</a>
+                <?php endif ?>
             </div>
         </div>
 

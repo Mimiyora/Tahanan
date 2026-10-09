@@ -25,10 +25,20 @@
             <nav id="site-nav" class="site-nav" aria-label="Coffeehouse navigation">
                 <a href="<?= site_url('coffeehouse') ?>" class="<?= $currentPage === 'coffeehouse' ? 'active' : '' ?>">Home</a>
                 <a href="<?= site_url('coffeehouse/about') ?>" class="<?= $currentPage === 'coffeehouse-about' ? 'active' : '' ?>">Our story</a>
-                <a href="<?= site_url('customers') ?>" class="<?= $currentPage === 'customers' ? 'active' : '' ?>">Customers</a>
-                <a href="<?= site_url('users') ?>" class="<?= $currentPage === 'users' ? 'active' : '' ?>">Users</a>
+                <?php if (session()->get('isLoggedIn') === true): ?>
+                    <a href="<?= site_url('customers') ?>" class="<?= $currentPage === 'customers' ? 'active' : '' ?>">Customers</a>
+                    <a href="<?= site_url('users') ?>" class="<?= $currentPage === 'users' ? 'active' : '' ?>">Users</a>
+                <?php endif ?>
                 <a href="<?= site_url('coffeehouse/team') ?>" class="<?= $currentPage === 'legacy-team' ? 'active' : '' ?>">Legacy team</a>
                 <a href="<?= site_url('/') ?>">Tasks</a>
+                <?php if (session()->get('isLoggedIn') === true): ?>
+                    <form class="nav-auth" action="<?= site_url('logout') ?>" method="post">
+                        <?= csrf_field() ?>
+                        <button type="submit">Log out</button>
+                    </form>
+                <?php else: ?>
+                    <a href="<?= site_url('login') ?>" class="<?= $currentPage === 'login' ? 'active' : '' ?>">Staff login</a>
+                <?php endif ?>
             </nav>
         </div>
     </header>

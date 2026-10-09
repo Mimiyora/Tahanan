@@ -6,7 +6,7 @@
         <div class="form-intro reveal">
             <span class="eyebrow"><?= esc($eyebrow) ?></span>
             <h1><?= esc($heading) ?></h1>
-            <p>Usernames must be unique. Profile pictures are accepted on the edit page as JPG or PNG files up to 2 MB and are prepared as square display images.</p>
+            <p>Usernames must be unique and passwords are stored as secure hashes. Profile pictures are accepted on the edit page as JPG or PNG files up to 2 MB.</p>
             <a class="back-link" href="<?= site_url('users') ?>">← Back to user accounts</a>
         </div>
 
@@ -48,6 +48,12 @@
                     <label for="email">Email address <span>Required</span></label>
                     <input id="email" name="email" type="email" maxlength="100" value="<?= esc(old('email', $user['email'] ?? '')) ?>" aria-describedby="email_help">
                     <small id="email_help"><?= isset($errors['email']) ? esc($errors['email']) : 'Use a valid email address such as name@example.com.' ?></small>
+                </div>
+
+                <div class="field <?= isset($errors['password']) ? 'field--error' : '' ?>">
+                    <label for="password">Password <span><?= $user === null ? 'Required' : 'Optional change' ?></span></label>
+                    <input id="password" name="password" type="password" maxlength="72" autocomplete="new-password" aria-describedby="password_help">
+                    <small id="password_help"><?= isset($errors['password']) ? esc($errors['password']) : ($user === null ? 'Use at least 8 characters.' : 'Leave blank to keep the current password; enter 8 or more characters to replace it.') ?></small>
                 </div>
 
                 <?php if ($user !== null): ?>

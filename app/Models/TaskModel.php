@@ -14,19 +14,22 @@ class TaskModel extends Model
         'title',
         'status',
         'task_date',
+        'is_archived',
         'created_at',
     ];
 
     public function forDate(string $date): array
     {
         return $this->where('task_date', $date)
+            ->where('is_archived', 0)
             ->orderBy('created_at', 'ASC')
             ->findAll();
     }
 
     public function ordered(): self
     {
-        return $this->orderBy('task_date', 'ASC')
+        return $this->where('is_archived', 0)
+            ->orderBy('task_date', 'ASC')
             ->orderBy('created_at', 'ASC');
     }
 }

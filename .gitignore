@@ -15,3 +15,15 @@
 /writable/*.db
 /public/uploads/avatars/*
 !/public/uploads/avatars/index.html
+
+# Local coursework, QA, and generated artifacts
+/.codex-docx-task/
+/_work_*/
+/*.docx
+
+# Local editor and deployment metadata
+/.vercel/
+/.idea/
+/.vscode/
+/.DS_Store
+/Thumbs.db

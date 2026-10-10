@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Tahanan Coffee House — a welcoming coffeehouse and daily team workspace.">
+    <meta name="description" content="Tahanan Coffee House, a warm neighborhood home for Philippine coffee.">
     <meta name="theme-color" content="#35251d">
     <title><?= esc($title) ?> · Tahanan Coffee House</title>
+    <link rel="icon" href="<?= base_url('assets/images/tahanan-mark.svg') ?>" type="image/svg+xml">
     <link rel="preload" href="<?= base_url('assets/fonts/lora-400.ttf') ?>" as="font" type="font/ttf" crossorigin>
     <link rel="preload" href="<?= base_url('assets/fonts/fraunces-600.ttf') ?>" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="<?= base_url('assets/css/app.css') ?>">
@@ -17,7 +18,7 @@
         <div class="shell nav-shell">
             <a class="brand" href="<?= site_url('/') ?>" aria-label="Tahanan Coffee House home">
                 <span class="brand-mark" aria-hidden="true">
-                    <svg viewBox="0 0 48 48"><path d="M5 5h38v38H5zM24 5v38M5 24h38"/><path d="M16 31c5-7 11-7 16 0M18 17c4-4 8-4 12 0"/></svg>
+                    <img src="<?= base_url('assets/images/tahanan-mark.svg') ?>" alt="">
                 </span>
                 <span class="brand-copy"><strong>Tahanan</strong><small>Coffee House</small></span>
             </a>
@@ -40,12 +41,12 @@
                 <div class="account-nav">
                     <?php if (session()->get('isLoggedIn') === true): ?>
                         <details class="manage-menu">
-                            <summary>Manage</summary>
+                            <summary>House tools</summary>
                             <div class="manage-menu__panel">
-                                <a href="<?= site_url('tasks/new') ?>">New task</a>
-                                <a href="<?= site_url('customers') ?>" <?= $currentPage === 'customers' ? 'aria-current="page"' : '' ?>>Customers</a>
-                                <a href="<?= site_url('users') ?>" <?= $currentPage === 'users' ? 'aria-current="page"' : '' ?>>User accounts</a>
-                                <a href="<?= site_url('coffeehouse/team') ?>" <?= $currentPage === 'legacy-team' ? 'aria-current="page"' : '' ?>>Legacy team</a>
+                                <a href="<?= site_url('tasks/new') ?>">Add to the day</a>
+                                <a href="<?= site_url('customers') ?>" <?= $currentPage === 'customers' ? 'aria-current="page"' : '' ?>>Our guests</a>
+                                <a href="<?= site_url('users') ?>" <?= $currentPage === 'users' ? 'aria-current="page"' : '' ?>>House team</a>
+                                <a href="<?= site_url('coffeehouse/team') ?>" <?= $currentPage === 'legacy-team' ? 'aria-current="page"' : '' ?>>Original team</a>
                             </div>
                         </details>
                         <div class="account-state">
@@ -70,7 +71,7 @@
         <div class="shell footer-grid">
             <div class="footer-brand">
                 <span class="brand-mark brand-mark--footer" aria-hidden="true">
-                    <svg viewBox="0 0 48 48"><path d="M5 5h38v38H5zM24 5v38M5 24h38"/><path d="M16 31c5-7 11-7 16 0M18 17c4-4 8-4 12 0"/></svg>
+                    <img src="<?= base_url('assets/images/tahanan-mark.svg') ?>" alt="">
                 </span>
                 <div><strong>Tahanan Coffee House</strong><p>Every cup feels like home.</p></div>
             </div>
@@ -78,7 +79,7 @@
                 <a href="<?= site_url('/') ?>">Today</a>
                 <a href="<?= site_url('tasks') ?>">All tasks</a>
                 <a href="<?= site_url('coffeehouse/about') ?>">Our story</a>
-                <a href="<?= site_url('coffeehouse/team') ?>">Legacy team</a>
+                <a href="<?= site_url('coffeehouse/team') ?>">Our team</a>
             </nav>
             <div class="footer-note">
                 <span>Open daily, 7:00 AM–9:00 PM</span>

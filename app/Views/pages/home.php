@@ -11,7 +11,7 @@ $statusLabels = ['pending' => 'Pending', 'in_progress' => 'In progress', 'comple
         <div class="hero-copy">
             <p class="context-line">Tahanan Today · <?= esc(date('l, F j, Y', strtotime($today))) ?></p>
             <h1>Make space for today.</h1>
-            <p class="hero-lede">A clear view of the work that keeps the coffeehouse welcoming, prepared, and moving together.</p>
+            <p class="hero-lede">Begin with the care behind every warm welcome, well-made cup, and ready table.</p>
             <div class="hero-actions">
                 <a class="button button--primary" href="#today-tasks">View today’s tasks</a>
                 <a class="text-link" href="<?= site_url('tasks') ?>">See the full schedule</a>
@@ -21,31 +21,26 @@ $statusLabels = ['pending' => 'Pending', 'in_progress' => 'In progress', 'comple
             </div>
         </div>
 
-        <div class="capiz-feature">
-            <figure class="capiz-feature__photo">
-                <img src="<?= base_url('assets/images/tahanan-hero.webp') ?>" alt="A ceramic cup of barako coffee on a sunlit wood counter beside capiz windows">
-            </figure>
-            <aside class="today-summary" aria-label="Today’s task summary">
-                <time class="today-summary__date" datetime="<?= esc($today) ?>">
-                    <strong><?= esc(date('j', strtotime($today))) ?></strong>
-                    <span><?= esc(date('F', strtotime($today))) ?></span>
-                </time>
-                <div class="today-summary__progress">
-                    <div class="summary-copy"><span>Today’s progress</span><strong><?= $completed ?> of <?= $taskCount ?> complete</strong></div>
-                    <div class="progress" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?= $progress ?>">
-                        <span style="width: <?= $progress ?>%"></span>
-                    </div>
-                    <p><?= $progress ?>% finished</p>
+        <aside class="today-summary" aria-label="Today’s task summary">
+            <time class="today-summary__date" datetime="<?= esc($today) ?>">
+                <strong><?= esc(date('j', strtotime($today))) ?></strong>
+                <span><?= esc(date('F', strtotime($today))) ?></span>
+            </time>
+            <div class="today-summary__progress">
+                <div class="summary-copy"><span>Today’s progress</span><strong><?= $completed ?> of <?= $taskCount ?> complete</strong></div>
+                <div class="progress" role="progressbar" aria-label="Tasks completed" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?= $progress ?>">
+                    <span style="width: <?= $progress ?>%"></span>
                 </div>
-            </aside>
-        </div>
+                <p><?= $progress ?>% finished</p>
+            </div>
+        </aside>
     </div>
 </section>
 
 <section id="today-tasks" class="task-section">
     <div class="shell">
         <div class="section-heading">
-            <div><p class="context-line">Today’s work</p><h2>Keep the house in rhythm</h2></div>
+            <div><p class="context-line">Today at Tahanan</p><h2>Keep the house in rhythm</h2></div>
             <span class="record-count-inline"><?= $taskCount ?> <?= $taskCount === 1 ? 'task' : 'tasks' ?></span>
         </div>
 

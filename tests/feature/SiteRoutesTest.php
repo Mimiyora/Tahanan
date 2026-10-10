@@ -60,14 +60,14 @@ final class SiteRoutesTest extends CIUnitTestCase
         $this->assertSame(1, db_connect()->table('users')->countAllResults());
     }
 
-    public function testAboutPageIdentifiesTheDeveloper(): void
+    public function testAboutPageDescribesTheCoffeeHouse(): void
     {
         $result = $this->get('/about');
 
         $result->assertOK();
-        $result->assertSee('About the system');
-        $result->assertSee('Gerard Doroja');
-        $result->assertSee('IT0049 Web System Technologies');
+        $result->assertSee('About Tahanan');
+        $result->assertSee('Philippine-grown beans');
+        $result->assertSee('Every cup should feel like coming home');
     }
 
     public function testCoffeehouseLandingAndStoryRemainAvailable(): void
@@ -103,11 +103,11 @@ final class SiteRoutesTest extends CIUnitTestCase
         $edit = $this->withSession($this->loginSession())->get('/customers/1/edit');
 
         $create->assertOK();
-        $create->assertSee('Create a customer account');
-        $create->assertSee('Save customer');
+        $create->assertSee('Welcome a new guest');
+        $create->assertSee('Save guest');
         $edit->assertOK();
         $edit->assertSee('Isabella Santos');
-        $edit->assertSee('Update customer');
+        $edit->assertSee('Save guest details');
     }
 
     public function testCustomerValidationRejectsBadInputAndValidInputIsInserted(): void
@@ -138,7 +138,7 @@ final class SiteRoutesTest extends CIUnitTestCase
         $edit = $this->withSession($this->loginSession())->get('/users/1/edit');
 
         $create->assertOK();
-        $create->assertSee('Create a user account');
+        $create->assertSee('Welcome a team member');
         $edit->assertOK();
         $edit->assertSee('Profile picture');
         $edit->assertSee('JPG or PNG only');
@@ -175,7 +175,7 @@ final class SiteRoutesTest extends CIUnitTestCase
         $result = $this->get('/coffeehouse/team');
 
         $result->assertOK();
-        $result->assertSee('Legacy directory');
+        $result->assertSee('Where we began');
         $result->assertSee('Ana Cruz');
         $result->assertSee('Luis Dizon');
     }
@@ -246,7 +246,7 @@ final class SiteRoutesTest extends CIUnitTestCase
 
         $createPage = $this->withSession($this->loginSession())->get('/tasks/new');
         $createPage->assertOK();
-        $createPage->assertSee('Create a new task');
+        $createPage->assertSee('Add to the day');
 
         $invalid = $this->withSession($this->loginSession())->post('/tasks', [
             'title'     => '',

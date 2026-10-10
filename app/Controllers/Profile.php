@@ -12,7 +12,7 @@ class Profile extends BaseController
 
         if ($user === null) {
             throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound(
-                'The demo profile has not been seeded yet.',
+                'No Tahanan steward is ready to introduce yet.',
             );
         }
 

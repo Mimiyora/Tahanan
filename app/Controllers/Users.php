@@ -20,7 +20,7 @@ class Users extends BaseController
         unset($user);
 
         return view('users/index', [
-            'title'       => 'User Accounts',
+            'title'       => 'House Team',
             'currentPage' => 'users',
             'users'       => $users,
             'legacyUsers' => $legacyUsers,
@@ -30,7 +30,7 @@ class Users extends BaseController
     public function legacy(): string
     {
         return view('staff/index', [
-            'title'       => 'Legacy Team Directory',
+            'title'       => 'Original Tahanan Team',
             'currentPage' => 'legacy-team',
             'users'       => $this->staffWithInitials(),
         ]);
@@ -38,7 +38,7 @@ class Users extends BaseController
 
     public function new(): string
     {
-        return $this->formView(null, 'New User', 'Create a user account', 'New point-of-sale account', site_url('users'), 'Save user');
+        return $this->formView(null, 'Add Team Member', 'Welcome a team member', 'Behind the counter', site_url('users'), 'Save team member');
     }
 
     public function create()
@@ -55,7 +55,7 @@ class Users extends BaseController
         $id = (new UserModel())->insert($data, true);
 
         return redirect()->to(site_url('users/' . $id . '/edit'))
-            ->with('success', 'User account created. You can now add a profile picture.');
+            ->with('success', 'Team member added. You can now add a profile picture.');
     }
 
     public function edit(int $id): string
@@ -63,10 +63,10 @@ class Users extends BaseController
         $user = (new UserModel())->find($id);
 
         if ($user === null) {
-            throw PageNotFoundException::forPageNotFound('User account not found.');
+            throw PageNotFoundException::forPageNotFound('Team member not found.');
         }
 
-        return $this->formView($user, 'Edit User', 'Edit user account', 'Update account and avatar', site_url('users/' . $id), 'Update user');
+        return $this->formView($user, 'Update Team Member', 'Update team details', 'Behind the counter', site_url('users/' . $id), 'Save team member');
     }
 
     public function update(int $id)
@@ -75,7 +75,7 @@ class Users extends BaseController
         $user = $model->find($id);
 
         if ($user === null) {
-            throw PageNotFoundException::forPageNotFound('User account not found.');
+            throw PageNotFoundException::forPageNotFound('Team member not found.');
         }
 
         $rules = $this->userRules($id);
@@ -130,7 +130,7 @@ class Users extends BaseController
             $this->removeAvatarFile((string) $user['avatar']);
         }
 
-        return redirect()->to(site_url('users'))->with('success', 'User account updated successfully.');
+        return redirect()->to(site_url('users'))->with('success', 'Team member details updated.');
     }
 
     private function formView(?array $user, string $title, string $heading, string $eyebrow, string $action, string $submitLabel): string

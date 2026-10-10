@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/coffeehouse') ?>
 
 <?= $this->section('content') ?>
-<section class="form-page"><div class="shell form-layout"><div class="form-intro"><p class="context-line"><?= esc($eyebrow) ?></p><h1><?= esc($heading) ?></h1><p>Required fields are checked on the server. If something needs attention, your entered values stay in place.</p><a class="back-link" href="<?= site_url('customers') ?>">Back to customer accounts</a></div><div class="form-card">
+<section class="form-page"><div class="shell form-layout"><div class="form-intro"><p class="context-line"><?= esc($eyebrow) ?></p><h1><?= esc($heading) ?></h1><p>Keep the details that help the team greet every returning guest with care.</p><a class="back-link" href="<?= site_url('customers') ?>">Back to our guests</a></div><div class="form-card">
 <?php if ($errors): ?><div class="validation-summary" role="alert"><strong>Please correct the highlighted fields.</strong><ul><?php foreach ($errors as $error): ?><li><?= esc($error) ?></li><?php endforeach ?></ul></div><?php endif ?>
 <form action="<?= esc($action) ?>" method="post" novalidate><?= csrf_field() ?>
 <div class="field <?= isset($errors['full_name']) ? 'field--error' : '' ?>"><label for="full_name">Full name <span>Required</span></label><input id="full_name" name="full_name" type="text" maxlength="100" value="<?= esc(old('full_name', $customer['full_name'] ?? '')) ?>" aria-describedby="full_name_help" <?= isset($errors['full_name']) ? 'aria-invalid="true"' : '' ?>><small id="full_name_help"><?= isset($errors['full_name']) ? esc($errors['full_name']) : 'Enter the customer’s complete name.' ?></small></div>

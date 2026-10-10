@@ -23,8 +23,8 @@ class Tasks extends BaseController
         return view('tasks/form', [
             'title'       => 'New Task',
             'currentPage' => 'tasks',
-            'heading'     => 'Create a new task',
-            'eyebrow'     => 'Add to the schedule',
+            'heading'     => 'Add to the day',
+            'eyebrow'     => 'Keep the house ready',
             'action'      => site_url('tasks'),
             'submitLabel' => 'Save task',
             'task'        => null,
@@ -46,7 +46,7 @@ class Tasks extends BaseController
         $data['is_archived'] = 0;
         (new TaskModel())->insert($data);
 
-        return redirect()->to(site_url('tasks'))->with('success', 'Task created successfully.');
+        return redirect()->to(site_url('tasks'))->with('success', 'Added to the house schedule.');
     }
 
     public function edit(int $id): string
@@ -56,8 +56,8 @@ class Tasks extends BaseController
         return view('tasks/form', [
             'title'       => 'Edit Task',
             'currentPage' => 'tasks',
-            'heading'     => 'Edit task details',
-            'eyebrow'     => 'Update the schedule',
+            'heading'     => 'Adjust the day',
+            'eyebrow'     => 'Keep the house ready',
             'action'      => site_url('tasks/' . $id),
             'submitLabel' => 'Update task',
             'task'        => $task,
@@ -78,7 +78,7 @@ class Tasks extends BaseController
 
         (new TaskModel())->update($id, $data);
 
-        return redirect()->to(site_url('tasks'))->with('success', 'Task updated successfully.');
+        return redirect()->to(site_url('tasks'))->with('success', 'The house schedule is updated.');
     }
 
     public function delete(int $id)
@@ -86,7 +86,7 @@ class Tasks extends BaseController
         $this->activeTask($id);
         (new TaskModel())->update($id, ['is_archived' => 1]);
 
-        return redirect()->to(site_url('tasks'))->with('success', 'Task archived successfully.');
+        return redirect()->to(site_url('tasks'))->with('success', 'Removed from the house schedule.');
     }
 
     private function activeTask(int $id): array

@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 <section class="form-page">
     <div class="shell form-layout">
-        <div class="form-intro"><p class="context-line"><?= esc($eyebrow) ?></p><h1><?= esc($heading) ?></h1><p>Set the title, date, and current status. Required fields are checked before the task is saved.</p><a class="back-link" href="<?= site_url('tasks') ?>">Back to all tasks</a></div>
+        <div class="form-intro"><p class="context-line"><?= esc($eyebrow) ?></p><h1><?= esc($heading) ?></h1><p>Plan the work that keeps each shift welcoming, prepared, and calm.</p><a class="back-link" href="<?= site_url('tasks') ?>">Back to all tasks</a></div>
         <div class="form-card">
             <?php if ($errors): ?><div class="validation-summary" role="alert"><strong>Please correct the highlighted fields.</strong><ul><?php foreach ($errors as $error): ?><li><?= esc($error) ?></li><?php endforeach ?></ul></div><?php endif ?>
             <form action="<?= esc($action) ?>" method="post" novalidate>

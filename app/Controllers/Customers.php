@@ -16,7 +16,7 @@ class Customers extends BaseController
         unset($customer);
 
         return view('customers/index', [
-            'title'       => 'Customer Accounts',
+            'title'       => 'Our Guests',
             'currentPage' => 'customers',
             'customers'   => $customers,
         ]);
@@ -25,12 +25,12 @@ class Customers extends BaseController
     public function new(): string
     {
         return view('customers/form', [
-            'title'       => 'New Customer',
+            'title'       => 'Add a Guest',
             'currentPage' => 'customers',
-            'heading'     => 'Create a customer account',
-            'eyebrow'     => 'New guest record',
+            'heading'     => 'Welcome a new guest',
+            'eyebrow'     => 'Around our table',
             'action'      => site_url('customers'),
-            'submitLabel' => 'Save customer',
+            'submitLabel' => 'Save guest',
             'customer'    => null,
             'errors'      => session('errors') ?? [],
         ]);
@@ -47,7 +47,7 @@ class Customers extends BaseController
         $data['created_at'] = date('Y-m-d H:i:s');
         (new CustomerModel())->insert($data);
 
-        return redirect()->to(site_url('customers'))->with('success', 'Customer account created successfully.');
+        return redirect()->to(site_url('customers'))->with('success', 'Guest added to Tahanan.');
     }
 
     public function edit(int $id): string
@@ -55,16 +55,16 @@ class Customers extends BaseController
         $customer = (new CustomerModel())->find($id);
 
         if ($customer === null) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Customer record not found.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Guest not found.');
         }
 
         return view('customers/form', [
-            'title'       => 'Edit Customer',
+            'title'       => 'Update Guest',
             'currentPage' => 'customers',
-            'heading'     => 'Edit customer account',
-            'eyebrow'     => 'Update guest record',
+            'heading'     => 'Update guest details',
+            'eyebrow'     => 'Around our table',
             'action'      => site_url('customers/' . $id),
-            'submitLabel' => 'Update customer',
+            'submitLabel' => 'Save guest details',
             'customer'    => $customer,
             'errors'      => session('errors') ?? [],
         ]);
@@ -75,7 +75,7 @@ class Customers extends BaseController
         $model = new CustomerModel();
 
         if ($model->find($id) === null) {
-            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Customer record not found.');
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Guest not found.');
         }
 
         $data = $this->customerData();
@@ -86,7 +86,7 @@ class Customers extends BaseController
 
         $model->update($id, $data);
 
-        return redirect()->to(site_url('customers'))->with('success', 'Customer account updated successfully.');
+        return redirect()->to(site_url('customers'))->with('success', 'Guest details updated.');
     }
 
     private function customerData(): array

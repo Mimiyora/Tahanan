@@ -10,7 +10,7 @@
             <div class="hero-actions">
                 <a class="button button--primary" href="<?= site_url('coffeehouse/about') ?>">Read our story</a>
                 <?php if (session()->get('isLoggedIn') === true): ?>
-                    <a class="text-link" href="<?= site_url('customers') ?>">Open customer accounts</a>
+                    <a class="text-link" href="<?= site_url('customers') ?>">Open our guest book</a>
                 <?php else: ?>
                     <a class="text-link" href="<?= site_url('login') ?>">Staff log in</a>
                 <?php endif ?>
@@ -21,20 +21,17 @@
                 <div><dt>100%</dt><dd>Philippine beans</dd></div>
             </dl>
         </div>
-        <figure class="coffee-hero__image capiz-photo">
-            <img src="<?= base_url('assets/images/tahanan-hero.webp') ?>" alt="Bright Tahanan Coffee House interior with barako coffee, warm wood, and capiz windows">
-        </figure>
     </div>
 </section>
 
 <section class="welcome-section">
     <div class="shell welcome-grid">
-        <div class="welcome-copy"><p class="context-line">One house, two ways in</p><h2>Come for the coffee. Stay for the people.</h2><p>Guests can learn our story and meet the legacy team. Signed-in staff can keep customer and user accounts close at hand.</p></div>
+        <div class="welcome-copy"><p class="context-line">One house, many stories</p><h2>Come for the coffee. Stay for the people.</h2><p>Discover how Tahanan began, meet the team, and remember the guests who make the house feel alive.</p></div>
         <div class="portal-list">
             <a href="<?= site_url('coffeehouse/about') ?>"><span>Our story</span><strong>How Tahanan came home</strong></a>
-            <a href="<?= site_url('coffeehouse/team') ?>"><span>Legacy team</span><strong>Meet the original six</strong></a>
-            <a href="<?= site_url('customers') ?>"><span>Customer accounts</span><strong>Care for the guest directory</strong></a>
-            <a href="<?= site_url('users') ?>"><span>User accounts</span><strong>Manage the people behind the counter</strong></a>
+            <a href="<?= site_url('coffeehouse/team') ?>"><span>Our beginnings</span><strong>Meet the original six</strong></a>
+            <a href="<?= site_url('customers') ?>"><span>Our guests</span><strong>Remember the people around our table</strong></a>
+            <a href="<?= site_url('users') ?>"><span>House team</span><strong>Care for the people behind the counter</strong></a>
         </div>
     </div>
 </section>

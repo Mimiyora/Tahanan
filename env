@@ -38,14 +38,9 @@ database.default.DBDriver = MySQLi
 database.default.DBPrefix =
 database.default.port = 3306
 
-# Production (Render + TiDB Cloud) uses these environment variables instead.
-# Copy the exact host, port, database, username, and password from TiDB Cloud.
-# TIDB_HOST = gateway01.ap-southeast-1.prod.aws.tidbcloud.com
-# TIDB_PORT = 4000
-# TIDB_DATABASE = tahanan_tasks
-# TIDB_USERNAME = '<cluster-prefix>.root'
-# TIDB_PASSWORD =
-# TIDB_SSL_CA = /etc/ssl/certs/ca-certificates.crt
+# Production (Render + Railway MySQL) uses Railway's public connection URL.
+# Enable Public Networking on the Railway MySQL service, then copy MYSQL_PUBLIC_URL.
+# MYSQL_PUBLIC_URL = mysql://USER:PASSWORD@HOST:PORT/DATABASE
 
 # Cloudinary stores production avatar uploads outside Render's ephemeral disk.
 # Use the API environment variable shown in the Cloudinary console.

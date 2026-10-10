@@ -206,16 +206,36 @@ class Database extends Config
             return false;
         };
 
-        $mysqlHost = $firstEnvironmentValue(['TIDB_HOST', 'MYSQLHOST', 'MYSQL_HOST']);
+        $mysqlUrl = $firstEnvironmentValue(['MYSQL_PUBLIC_URL', 'DATABASE_URL']);
 
-        if (false !== $mysqlHost) {
+        if (false !== $mysqlUrl && $mysqlUrl !== '') {
+            $connection = parse_url($mysqlUrl);
+
+            if (
+                false === $connection
+                || ($connection['scheme'] ?? '') !== 'mysql'
+                || ! isset($connection['host'], $connection['user'], $connection['path'])
+            ) {
+                throw new \InvalidArgumentException('MYSQL_PUBLIC_URL must be a valid mysql:// connection URL.');
+            }
+
+            $this->default['hostname'] = $connection['host'];
+            $this->default['username'] = rawurldecode($connection['user']);
+            $this->default['password'] = rawurldecode($connection['pass'] ?? '');
+            $this->default['database'] = rawurldecode(ltrim($connection['path'], '/'));
+            $this->default['port']     = (int) ($connection['port'] ?? 3306);
+        }
+
+        $mysqlHost = $firstEnvironmentValue(['MYSQLHOST', 'MYSQL_HOST', 'TIDB_HOST']);
+
+        if ((false === $mysqlUrl || $mysqlUrl === '') && false !== $mysqlHost) {
             $this->default['hostname'] = $mysqlHost;
-            $this->default['username'] = $firstEnvironmentValue(['TIDB_USERNAME', 'MYSQLUSER', 'MYSQL_USER']) ?: '';
-            $this->default['password'] = $firstEnvironmentValue(['TIDB_PASSWORD', 'MYSQLPASSWORD', 'MYSQL_PASSWORD']) ?: '';
-            $this->default['database'] = $firstEnvironmentValue(['TIDB_DATABASE', 'MYSQLDATABASE', 'MYSQL_DATABASE']) ?: '';
-            $this->default['port']     = (int) ($firstEnvironmentValue(['TIDB_PORT', 'MYSQLPORT', 'MYSQL_PORT']) ?: 4000);
+            $this->default['username'] = $firstEnvironmentValue(['MYSQLUSER', 'MYSQL_USER', 'TIDB_USERNAME']) ?: '';
+            $this->default['password'] = $firstEnvironmentValue(['MYSQLPASSWORD', 'MYSQL_PASSWORD', 'TIDB_PASSWORD']) ?: '';
+            $this->default['database'] = $firstEnvironmentValue(['MYSQLDATABASE', 'MYSQL_DATABASE', 'TIDB_DATABASE']) ?: '';
+            $this->default['port']     = (int) ($firstEnvironmentValue(['MYSQLPORT', 'MYSQL_PORT', 'TIDB_PORT']) ?: 3306);
 
-            $sslCa = $firstEnvironmentValue(['TIDB_SSL_CA', 'MYSQL_SSL_CA']);
+            $sslCa = $firstEnvironmentValue(['MYSQL_SSL_CA', 'TIDB_SSL_CA']);
 
             if (false !== $sslCa && $sslCa !== '') {
                 $this->default['encrypt'] = [

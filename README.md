@@ -34,7 +34,7 @@ Authenticated management routes:
 - Customer email validation and user username uniqueness remain enforced.
 - Passwords are hashed with `password_hash()` and checked with `password_verify()`.
 - New avatars accept JPG or PNG files up to 2 MB. The browser prepares a centered 320 × 320 image before submission; the server validates the image and retains a server-side crop fallback where an image driver is available.
-- In production, avatars are stored in Cloudinary and their secure URL plus Cloudinary public ID are saved in TiDB. Local development falls back to `public/uploads/avatars` when `CLOUDINARY_URL` is not set.
+- In production, avatars are stored in Cloudinary and their secure URL plus Cloudinary public ID are saved in Railway MySQL. Local development falls back to `public/uploads/avatars` when `CLOUDINARY_URL` is not set.
 
 The seeded demonstration login is:
 
@@ -95,25 +95,21 @@ When SQLite is installed but disabled in the CLI configuration, enable it for th
 The production architecture is:
 
 - GitHub stores the source and triggers deployments from the selected branch.
-- TiDB Cloud stores application records through its MySQL-compatible, TLS-protected endpoint.
+- Railway MySQL stores application records.
 - Cloudinary stores uploaded avatars permanently. This avoids Render's ephemeral filesystem.
 - Render builds the Docker image, applies pending CodeIgniter migrations at startup, and serves the site on the platform-provided port.
 
 No credentials belong in Git. The committed `render.yaml` declares secret variables with `sync: false`, so Render asks for them when the Blueprint is created.
 
-### 1. Create TiDB Cloud
+### 1. Create Railway MySQL
 
-1. Create a TiDB Cloud Starter or Essential instance near the Render `singapore` region.
-2. Create the `tahanan_tasks` database in the TiDB SQL console:
+1. In Railway, create a project and select **New > Database > Add MySQL**.
+2. Open the MySQL service, then go to **Settings > Networking**.
+3. Under **Public Networking**, select **Add TCP Proxy**. Railway creates an externally reachable host and port.
+4. Open the service's **Variables** tab and copy the value of `MYSQL_PUBLIC_URL`.
+5. In Render, open the `tahanan` service, select **Environment**, and add `MYSQL_PUBLIC_URL` with the copied value. Remove the old `TIDB_*` variables after the Railway connection works.
 
-   ```sql
-   CREATE DATABASE tahanan_tasks CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-   ```
-
-3. Open **Connect**, choose the public endpoint, and copy the host, port, username, and password. Starter/Essential usernames include the instance prefix (for example, `<prefix>.root`).
-4. Add the credentials to Render as `TIDB_HOST`, `TIDB_PORT`, `TIDB_DATABASE`, `TIDB_USERNAME`, and `TIDB_PASSWORD`. `TIDB_SSL_CA` is already set to the Debian system CA bundle in `render.yaml` so the server certificate is verified.
-
-The container runs `php spark migrate --all` before Apache starts. To add the demonstration records, run this once from a trusted machine configured with the same TiDB variables:
+The container runs `php spark migrate --all` before Apache starts, so the Railway database schema is created automatically. To add the demonstration records, run this once from a trusted machine configured with the same `MYSQL_PUBLIC_URL`:
 
 ```bash
 php spark db:seed DatabaseSeeder
@@ -136,4 +132,4 @@ New production avatars are uploaded into `tahanan/avatars`. Replacing an avatar 
 3. Enter every variable marked `sync: false`, then deploy.
 4. Confirm that `https://<service>.onrender.com/health` returns `{"status":"ok","database":"connected"}`.
 
-The Blueprint uses Render's free web-service plan. Free services can spin down while idle, and their local filesystem is ephemeral; TiDB and Cloudinary keep durable data outside the container. For a paid Render plan, migrations may instead be moved from the Docker `CMD` to a Render pre-deploy command for cleaner zero-downtime releases.
+The Blueprint uses Render's free web-service plan. Free services can spin down while idle, and their local filesystem is ephemeral; Railway MySQL and Cloudinary keep durable data outside the container. Railway's public TCP proxy also counts outbound database traffic toward Railway usage. For a paid Render plan, migrations may instead be moved from the Docker `CMD` to a Render pre-deploy command for cleaner zero-downtime releases.

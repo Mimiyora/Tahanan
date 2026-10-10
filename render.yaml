@@ -11,17 +11,7 @@ services:
     envVars:
       - key: CI_ENVIRONMENT
         value: production
-      - key: TIDB_HOST
+      - key: MYSQL_PUBLIC_URL
         sync: false
-      - key: TIDB_PORT
-        value: "4000"
-      - key: TIDB_DATABASE
-        sync: false
-      - key: TIDB_USERNAME
-        sync: false
-      - key: TIDB_PASSWORD
-        sync: false
-      - key: TIDB_SSL_CA
-        value: /etc/ssl/certs/ca-certificates.crt
       - key: CLOUDINARY_URL
         sync: false

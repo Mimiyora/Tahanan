@@ -26,6 +26,17 @@ final class SiteRoutesTest extends CIUnitTestCase
         ];
     }
 
+    public function testHealthCheckConfirmsDatabaseConnectivity(): void
+    {
+        $result = $this->get('/health');
+
+        $result->assertOK();
+        $result->assertJSONExact([
+            'status'   => 'ok',
+            'database' => 'connected',
+        ]);
+    }
+
     public function testWelcomePageShowsOnlyTodaysTasks(): void
     {
         $result = $this->get('/');
@@ -144,6 +155,7 @@ final class SiteRoutesTest extends CIUnitTestCase
         $edit->assertSee('JPG or PNG only');
         $database = db_connect();
         $this->assertContains('avatar', $database->getFieldNames($database->prefixTable('users')));
+        $this->assertContains('avatar_public_id', $database->getFieldNames($database->prefixTable('users')));
     }
 
     public function testUsernamesRemainUniqueAndValidUsersCanBeCreated(): void

@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Libraries\AvatarStorage;
 use App\Models\StaffModel;
 use App\Models\UserModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use RuntimeException;
 use Throwable;
 
 class Users extends BaseController
@@ -106,17 +108,25 @@ class Users extends BaseController
             $data['password'] = password_hash($password, PASSWORD_DEFAULT);
         }
         $newAvatar = null;
+        $avatarStorage = new AvatarStorage();
 
         try {
             if ($hasAvatar && $avatar !== null) {
-                $newAvatar = $this->prepareAvatar($avatar);
-                $data['avatar'] = $newAvatar;
+                $newAvatar = $avatarStorage->store($avatar);
+                $data['avatar'] = $newAvatar['url'];
+                $data['avatar_public_id'] = $newAvatar['publicId'];
             }
 
-            $model->update($id, $data);
+            if ($model->update($id, $data) === false) {
+                throw new RuntimeException('Unable to save the team member.');
+            }
         } catch (Throwable $exception) {
             if ($newAvatar !== null) {
-                $this->removeAvatarFile($newAvatar);
+                try {
+                    $avatarStorage->delete($newAvatar['url'], $newAvatar['publicId']);
+                } catch (Throwable $cleanupException) {
+                    log_message('error', 'New avatar cleanup failed: {message}', ['message' => $cleanupException->getMessage()]);
+                }
             }
 
             log_message('error', 'Avatar preparation failed: {message}', ['message' => $exception->getMessage()]);
@@ -127,7 +137,14 @@ class Users extends BaseController
         }
 
         if ($newAvatar !== null && ! empty($user['avatar'])) {
-            $this->removeAvatarFile((string) $user['avatar']);
+            try {
+                $avatarStorage->delete(
+                    (string) $user['avatar'],
+                    empty($user['avatar_public_id']) ? null : (string) $user['avatar_public_id'],
+                );
+            } catch (Throwable $exception) {
+                log_message('error', 'Previous avatar cleanup failed: {message}', ['message' => $exception->getMessage()]);
+            }
         }
 
         return redirect()->to(site_url('users'))->with('success', 'Team member details updated.');
@@ -177,36 +194,6 @@ class Users extends BaseController
                 'rules' => ($id === null ? 'required|' : 'permit_empty|') . 'min_length[8]|max_length[72]',
             ],
         ];
-    }
-
-    private function prepareAvatar($avatar): string
-    {
-        $directory = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'avatars';
-
-        if (! is_dir($directory) && ! mkdir($directory, 0775, true) && ! is_dir($directory)) {
-            throw new \RuntimeException('Unable to create the avatar upload directory.');
-        }
-
-        $extension = strtolower($avatar->getExtension());
-        $filename = pathinfo($avatar->getRandomName(), PATHINFO_FILENAME) . '.' . $extension;
-        $destination = $directory . DIRECTORY_SEPARATOR . $filename;
-
-        service('image')
-            ->withFile($avatar->getTempName())
-            ->fit(320, 320, 'center')
-            ->save($destination, 85);
-
-        return $filename;
-    }
-
-    private function removeAvatarFile(string $filename): void
-    {
-        $safeName = basename($filename);
-        $path = FCPATH . 'uploads' . DIRECTORY_SEPARATOR . 'avatars' . DIRECTORY_SEPARATOR . $safeName;
-
-        if (is_file($path)) {
-            unlink($path);
-        }
     }
 
     private function staffWithInitials(): array

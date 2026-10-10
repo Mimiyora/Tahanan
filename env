@@ -38,6 +38,19 @@ database.default.DBDriver = MySQLi
 database.default.DBPrefix =
 database.default.port = 3306
 
+# Production (Render + TiDB Cloud) uses these environment variables instead.
+# Copy the exact host, port, database, username, and password from TiDB Cloud.
+# TIDB_HOST = gateway01.ap-southeast-1.prod.aws.tidbcloud.com
+# TIDB_PORT = 4000
+# TIDB_DATABASE = tahanan_tasks
+# TIDB_USERNAME = '<cluster-prefix>.root'
+# TIDB_PASSWORD =
+# TIDB_SSL_CA = /etc/ssl/certs/ca-certificates.crt
+
+# Cloudinary stores production avatar uploads outside Render's ephemeral disk.
+# Use the API environment variable shown in the Cloudinary console.
+# CLOUDINARY_URL = cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost
 # database.tests.database = ci4_test

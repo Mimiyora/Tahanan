@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: tahanan
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: CI_ENVIRONMENT
+        value: production
+      - key: TIDB_HOST
+        sync: false
+      - key: TIDB_PORT
+        value: "4000"
+      - key: TIDB_DATABASE
+        sync: false
+      - key: TIDB_USERNAME
+        sync: false
+      - key: TIDB_PASSWORD
+        sync: false
+      - key: TIDB_SSL_CA
+        value: /etc/ssl/certs/ca-certificates.crt
+      - key: CLOUDINARY_URL
+        sync: false

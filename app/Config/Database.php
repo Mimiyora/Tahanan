@@ -206,15 +206,26 @@ class Database extends Config
             return false;
         };
 
-        $mysqlHost = $firstEnvironmentValue(['MYSQLHOST', 'MYSQL_HOST']);
+        $mysqlHost = $firstEnvironmentValue(['TIDB_HOST', 'MYSQLHOST', 'MYSQL_HOST']);
 
         if (false !== $mysqlHost) {
             $this->default['hostname'] = $mysqlHost;
-            $this->default['username'] = $firstEnvironmentValue(['MYSQLUSER', 'MYSQL_USER']) ?: '';
-            $this->default['password'] = $firstEnvironmentValue(['MYSQLPASSWORD', 'MYSQL_PASSWORD']) ?: '';
-            $this->default['database'] = $firstEnvironmentValue(['MYSQLDATABASE', 'MYSQL_DATABASE']) ?: '';
-            $this->default['port']     = (int) ($firstEnvironmentValue(['MYSQLPORT', 'MYSQL_PORT']) ?: 3306);
+            $this->default['username'] = $firstEnvironmentValue(['TIDB_USERNAME', 'MYSQLUSER', 'MYSQL_USER']) ?: '';
+            $this->default['password'] = $firstEnvironmentValue(['TIDB_PASSWORD', 'MYSQLPASSWORD', 'MYSQL_PASSWORD']) ?: '';
+            $this->default['database'] = $firstEnvironmentValue(['TIDB_DATABASE', 'MYSQLDATABASE', 'MYSQL_DATABASE']) ?: '';
+            $this->default['port']     = (int) ($firstEnvironmentValue(['TIDB_PORT', 'MYSQLPORT', 'MYSQL_PORT']) ?: 4000);
+
+            $sslCa = $firstEnvironmentValue(['TIDB_SSL_CA', 'MYSQL_SSL_CA']);
+
+            if (false !== $sslCa && $sslCa !== '') {
+                $this->default['encrypt'] = [
+                    'ssl_ca'     => $sslCa,
+                    'ssl_verify' => true,
+                ];
+            }
         }
+
+        $this->default['DBDebug'] = ENVIRONMENT !== 'production';
 
         // Ensure that we always set the database group to 'tests' if
         // we are currently running an automated test suite, so that

@@ -15,6 +15,7 @@ class UserModel extends Model
         'full_name',
         'email',
         'avatar',
+        'avatar_public_id',
         'password',
         'created_at',
     ];

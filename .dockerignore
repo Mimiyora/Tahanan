@@ -1,0 +1,17 @@
+.git
+.github
+.env
+.env.*
+.vercel
+.codex-docx-task
+_work_*
+build
+tests
+vendor
+writable/cache/*
+writable/debugbar/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+public/uploads/avatars/*
+*.docx

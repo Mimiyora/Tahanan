@@ -34,7 +34,7 @@ Authenticated management routes:
 - Customer email validation and user username uniqueness remain enforced.
 - Passwords are hashed with `password_hash()` and checked with `password_verify()`.
 - New avatars accept JPG or PNG files up to 2 MB. The browser prepares a centered 320 × 320 image before submission; the server validates the image and retains a server-side crop fallback where an image driver is available.
-- Avatars are stored locally in `public/uploads/avatars`, while only the generated filename is saved in the user record.
+- In production, avatars are stored in Cloudinary and their secure URL plus Cloudinary public ID are saved in TiDB. Local development falls back to `public/uploads/avatars` when `CLOUDINARY_URL` is not set.
 
 The seeded demonstration login is:
 
@@ -89,3 +89,51 @@ composer test
 ```
 
 When SQLite is installed but disabled in the CLI configuration, enable it for the command (for example, `php -d extension=sqlite3 vendor/bin/phpunit` on the bundled Windows setup).
+
+## Production deployment
+
+The production architecture is:
+
+- GitHub stores the source and triggers deployments from the selected branch.
+- TiDB Cloud stores application records through its MySQL-compatible, TLS-protected endpoint.
+- Cloudinary stores uploaded avatars permanently. This avoids Render's ephemeral filesystem.
+- Render builds the Docker image, applies pending CodeIgniter migrations at startup, and serves the site on the platform-provided port.
+
+No credentials belong in Git. The committed `render.yaml` declares secret variables with `sync: false`, so Render asks for them when the Blueprint is created.
+
+### 1. Create TiDB Cloud
+
+1. Create a TiDB Cloud Starter or Essential instance near the Render `singapore` region.
+2. Create the `tahanan_tasks` database in the TiDB SQL console:
+
+   ```sql
+   CREATE DATABASE tahanan_tasks CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+   ```
+
+3. Open **Connect**, choose the public endpoint, and copy the host, port, username, and password. Starter/Essential usernames include the instance prefix (for example, `<prefix>.root`).
+4. Add the credentials to Render as `TIDB_HOST`, `TIDB_PORT`, `TIDB_DATABASE`, `TIDB_USERNAME`, and `TIDB_PASSWORD`. `TIDB_SSL_CA` is already set to the Debian system CA bundle in `render.yaml` so the server certificate is verified.
+
+The container runs `php spark migrate --all` before Apache starts. To add the demonstration records, run this once from a trusted machine configured with the same TiDB variables:
+
+```bash
+php spark db:seed DatabaseSeeder
+```
+
+Do not seed a real production system unless the demonstration account and password are acceptable.
+
+### 2. Create Cloudinary
+
+1. Create or open a Cloudinary product environment.
+2. Copy its `CLOUDINARY_URL` from the API keys page.
+3. Add that value to Render as the secret `CLOUDINARY_URL`.
+
+New production avatars are uploaded into `tahanan/avatars`. Replacing an avatar also removes the previous Cloudinary asset when its public ID is known.
+
+### 3. Deploy on Render
+
+1. Push this repository to GitHub.
+2. In Render, select **New > Blueprint**, connect the GitHub repository, and use the root `render.yaml`.
+3. Enter every variable marked `sync: false`, then deploy.
+4. Confirm that `https://<service>.onrender.com/health` returns `{"status":"ok","database":"connected"}`.
+
+The Blueprint uses Render's free web-service plan. Free services can spin down while idle, and their local filesystem is ephemeral; TiDB and Cloudinary keep durable data outside the container. For a paid Render plan, migrations may instead be moved from the Docker `CMD` to a Render pre-deploy command for cleaner zero-downtime releases.

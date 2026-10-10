@@ -29,6 +29,7 @@ CREATE TABLE `users` (
     `full_name` VARCHAR(100) NOT NULL,
     `email` VARCHAR(100) NOT NULL,
     `avatar` VARCHAR(255) NULL,
+    `avatar_public_id` VARCHAR(255) NULL,
     `password` VARCHAR(255) NOT NULL,
     `created_at` DATETIME NOT NULL,
     PRIMARY KEY (`id`),
@@ -65,8 +66,8 @@ INSERT INTO `tasks` (`title`, `status`, `task_date`, `created_at`) VALUES
 ('Update the weekly task summary', 'pending', DATE_ADD(CURDATE(), INTERVAL 3 DAY), TIMESTAMP(CURDATE(), '08:30:00')),
 ('Archive finished project notes', 'pending', DATE_ADD(CURDATE(), INTERVAL 7 DAY), TIMESTAMP(CURDATE(), '08:45:00'));
 
-INSERT INTO `users` (`username`, `full_name`, `email`, `avatar`, `password`, `created_at`) VALUES
-('gerard.doroja', 'Gerard Doroja', 'gerard.doroja@example.com', NULL, '$2y$10$IAaemP59nstbjsCVw3zWq.r4wyYaXRsXpx1A6nfsA.4lx4A2gYqR2', NOW());
+INSERT INTO `users` (`username`, `full_name`, `email`, `avatar`, `avatar_public_id`, `password`, `created_at`) VALUES
+('gerard.doroja', 'Gerard Doroja', 'gerard.doroja@example.com', NULL, NULL, '$2y$10$IAaemP59nstbjsCVw3zWq.r4wyYaXRsXpx1A6nfsA.4lx4A2gYqR2', NOW());
 
 INSERT INTO `customers` (`full_name`, `email`, `phone`, `created_at`) VALUES
 ('Isabella Santos', 'isabella.santos@example.com', '+63 917 234 0182', '2026-09-01 09:15:00'),

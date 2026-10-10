@@ -33,4 +33,4 @@ RUN mkdir -p writable/cache writable/debugbar writable/logs writable/session wri
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "php spark migrate --all && exec apache2-foreground"]
+CMD ["sh", "-c", "php spark migrate --all && php spark db:seed DatabaseSeeder && exec apache2-foreground"]

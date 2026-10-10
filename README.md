@@ -109,13 +109,7 @@ No credentials belong in Git. The committed `render.yaml` declares secret variab
 4. Open the service's **Variables** tab and copy the value of `MYSQL_PUBLIC_URL`.
 5. In Render, open the `tahanan` service, select **Environment**, and add `MYSQL_PUBLIC_URL` with the copied value. Remove the old `TIDB_*` variables after the Railway connection works.
 
-The container runs `php spark migrate --all` before Apache starts, so the Railway database schema is created automatically. To add the demonstration records, run this once from a trusted machine configured with the same `MYSQL_PUBLIC_URL`:
-
-```bash
-php spark db:seed DatabaseSeeder
-```
-
-Do not seed a real production system unless the demonstration account and password are acceptable.
+The container runs migrations and the idempotent `DatabaseSeeder` before Apache starts, so a fresh Railway database receives its schema and demonstration records automatically. Change or remove the demonstration account before using the application beyond a demonstration environment.
 
 ### 2. Create Cloudinary
 

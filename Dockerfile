@@ -7,7 +7,9 @@ RUN composer install \
     --no-interaction \
     --no-progress \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --ignore-platform-req=ext-intl \
+    --ignore-platform-req=ext-mbstring
 
 FROM php:8.3-apache-bookworm
 
